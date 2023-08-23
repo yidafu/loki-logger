@@ -1,4 +1,4 @@
-package dev.yidafu.loki.common
+package dev.yidafu.loki.list
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
