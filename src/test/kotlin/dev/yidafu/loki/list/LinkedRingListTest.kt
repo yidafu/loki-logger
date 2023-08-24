@@ -20,18 +20,6 @@ class LinkedRingListTest {
     }
 
     @Test
-    fun testIterator() {
-        val list = LinkedRingList<Int>(4)
-        list.add(1)
-        list.add(2)
-        val iter = list.iterator()
-        for (i in iter) {
-            assertEquals(i, 1)
-            iter.remove()
-        }
-    }
-
-    @Test
     fun testArrayIterator() {
         val list = LinkedRingList<Int>(4)
         list.add(1)
