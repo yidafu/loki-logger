@@ -53,7 +53,7 @@ class LokiServiceProvider : SLF4JServiceProvider {
      * @return the string API version.
      */
     override fun getRequestedApiVersion(): String {
-       return REQUESTED_API_VERSION
+        return REQUESTED_API_VERSION
     }
 
     /**
