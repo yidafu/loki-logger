@@ -1,4 +1,4 @@
-package dev.yidafu.loki.common
+package dev.yidafu.loki.list
 
 /**
  * A collection designed for holding elements prior to processing.

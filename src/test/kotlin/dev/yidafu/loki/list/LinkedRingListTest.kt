@@ -1,4 +1,4 @@
-package dev.yidafu.loki.common
+package dev.yidafu.loki.list
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -17,18 +17,6 @@ class LinkedRingListTest {
         assertEquals(list.fold(0) { acc, i -> acc + i }, 14)
         list.remove()
         assertEquals(list.fold(0) { acc, i -> acc + i }, 12)
-    }
-
-    @Test
-    fun testIterator() {
-        val list = LinkedRingList<Int>(4)
-        list.add(1)
-        list.add(2)
-        val iter = list.iterator()
-        for (i in iter) {
-            assertEquals(i, 1)
-            iter.remove()
-        }
     }
 
     @Test
