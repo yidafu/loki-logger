@@ -1,8 +1,6 @@
 package dev.yidafu.loki.core
 
-import dev.yidafu.loki.core.hook.PrepareLifecycleHook
-
-interface ILogEvent : PrepareLifecycleHook {
+interface ILogEvent {
     abstract val timestamp: Long
 
     abstract val topic: String

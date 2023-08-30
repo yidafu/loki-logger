@@ -3,6 +3,7 @@ package dev.yidafu.loki.server
 import dev.yidafu.loki.core.LokiLoggerContext
 import dev.yidafu.loki.core.LokiMDCAdapter
 import dev.yidafu.loki.core.appender.ConsoleAppender
+import dev.yidafu.loki.core.appender.FileAppender
 import org.slf4j.ILoggerFactory
 import org.slf4j.IMarkerFactory
 import org.slf4j.helpers.BasicMarkerFactory
@@ -69,7 +70,12 @@ class ServerServiceProvider : SLF4JServiceProvider {
      */
     override fun initialize() {
         loggerContext = LokiLoggerContext()
-        loggerContext.root.addAppender(ConsoleAppender("CONSOLE"))
+        val cAppender = ConsoleAppender("CONSOLE")
+        cAppender.setContext(loggerContext)
+        loggerContext.root.addAppender(cAppender)
+        val fAppender = FileAppender("FILE")
+        fAppender.setContext(loggerContext)
+        loggerContext.root.addAppender(fAppender)
         mdcAdapter = LokiMDCAdapter()
         markerFactory = BasicMarkerFactory()
     }

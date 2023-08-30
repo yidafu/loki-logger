@@ -17,11 +17,9 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0")
         // https://mvnrepository.com/artifact/com.android.tools.build/gradle
         classpath("com.android.tools.build:gradle:7.4.1")
-
     }
 }
 
 include("loki-core")
 include("loki-server")
 include("loki-android")
-// include("server-example")

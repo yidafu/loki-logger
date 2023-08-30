@@ -1,14 +1,14 @@
 package dev.yidafu.loki.core.codec
 
 import dev.yidafu.loki.core.Level
-import dev.yidafu.loki.core.LogEvent
+import dev.yidafu.loki.core.LokiLogEvent
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class LogCodecTest {
     @Test
     fun codecTest() {
-        val event = LogEvent(
+        val event = LokiLogEvent(
             1693232661802L,
             "topic",
             "local-hostname",
