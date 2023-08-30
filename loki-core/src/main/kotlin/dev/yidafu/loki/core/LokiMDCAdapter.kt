@@ -5,6 +5,7 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
 class LokiMDCAdapter : MDCAdapter {
+    private val defineMap = ConcurrentHashMap<String, String>()
     private val contextMap = ConcurrentHashMap<String, String>()
 
     /**

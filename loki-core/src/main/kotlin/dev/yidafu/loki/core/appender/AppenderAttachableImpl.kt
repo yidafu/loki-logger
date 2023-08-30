@@ -14,14 +14,14 @@ class AppenderAttachableImpl<E> : AppenderAttachable<E> {
     }
 
     override fun detachAndStopAllAppenders() {
-        appenderList.forEach { it.stop() }
+        appenderList.forEach { it.onStop() }
         appenderList.clear()
     }
 
     override fun detachAppender(name: String): Boolean {
         val appender = appenderList.find { it.name == name }
         return appender?.let {
-            it.stop()
+            it.onStop()
             appenderList.remove(it)
             true
         } ?: false

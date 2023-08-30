@@ -1,10 +1,12 @@
 package dev.yidafu.loki.core
 
+import dev.yidafu.loki.core.listener.EventBus
+import dev.yidafu.loki.core.listener.EventBusDelegate
 import org.slf4j.ILoggerFactory
 import org.slf4j.Logger
 import java.util.concurrent.ConcurrentHashMap
 
-class LokiLoggerContext : ILoggerFactory {
+class LokiLoggerContext : ILoggerFactory, EventBus by EventBusDelegate {
     private val loggerMap: MutableMap<String, LokiLogger> = ConcurrentHashMap()
 
     val root: LokiLogger = LokiLogger(LokiLogger.ROOT_LOGGER_NAME)
@@ -64,5 +66,14 @@ class LokiLoggerContext : ILoggerFactory {
                     cLogger
                 }
             }
+    }
+
+    fun start() {
+        emitStart()
+    }
+
+
+    fun stop() {
+        emitStop()
     }
 }

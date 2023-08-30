@@ -2,7 +2,7 @@ package dev.yidafu.loki.core.codec
 
 import dev.yidafu.loki.core.ILogEvent
 import dev.yidafu.loki.core.Level
-import dev.yidafu.loki.core.LogEvent
+import dev.yidafu.loki.core.LokiLogEvent
 
 object LogCodec : ICodec<ILogEvent> {
     override fun encode(event: ILogEvent): String {
@@ -63,7 +63,7 @@ object LogCodec : ICodec<ILogEvent> {
         val msgLeftIndex = leftIndex.coerceAtLeast(loggerIndex) + 1
         val msgIndex = raw.indexOf('-', msgLeftIndex)
         val msg = raw.slice((msgIndex + 2)..<raw.length)
-        return LogEvent(
+        return LokiLogEvent(
             timestamp.toLong(),
             topic,
             hostname,
