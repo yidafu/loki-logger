@@ -1,82 +1,52 @@
 package dev.yidafu.loki.server
 
-import dev.yidafu.loki.core.LokiLoggerContext
-import dev.yidafu.loki.core.LokiMDCAdapter
+import dev.yidafu.loki.core.BaseServiceProvider
 import dev.yidafu.loki.core.appender.ConsoleAppender
 import dev.yidafu.loki.core.appender.FileAppender
-import org.slf4j.ILoggerFactory
-import org.slf4j.IMarkerFactory
-import org.slf4j.helpers.BasicMarkerFactory
-import org.slf4j.spi.MDCAdapter
-import org.slf4j.spi.SLF4JServiceProvider
+import dev.yidafu.loki.core.reporter.LogFileReporter
+import dev.yidafu.loki.core.sender.DefaultSender
+import dev.yidafu.loki.core.sender.HttpSender
+import org.slf4j.MDC
+import java.net.InetAddress
 
-class ServerServiceProvider : SLF4JServiceProvider {
-    private lateinit var loggerContext: LokiLoggerContext
-    private lateinit var markerFactory: BasicMarkerFactory
-    private lateinit var mdcAdapter: LokiMDCAdapter
-
-    private val REQUESTED_API_VERSION = "2.99.99"
-
-    /**
-     * Return the instance of [ILoggerFactory] that
-     * [org.slf4j.LoggerFactory] class should bind to.
-     *
-     * @return instance of [ILoggerFactory]
-     */
-    override fun getLoggerFactory(): ILoggerFactory {
-        return loggerContext
-    }
-
-    /**
-     * Return the instance of [IMarkerFactory] that
-     * [org.slf4j.MarkerFactory] class should bind to.
-     *
-     * @return instance of [IMarkerFactory]
-     */
-    override fun getMarkerFactory(): IMarkerFactory {
-        return markerFactory
-    }
-
-    /**
-     * Return the instance of [MDCAdapter] that
-     * [MDC] should bind to.
-     *
-     * @return instance of [MDCAdapter]
-     */
-    override fun getMDCAdapter(): MDCAdapter {
-        return mdcAdapter
-    }
-
-    /**
-     * Return the maximum API version for SLF4J that the logging
-     * implementation supports.
-     *
-     *
-     * For example: `"2.0.1"`.
-     *
-     * @return the string API version.
-     */
-    override fun getRequestedApiVersion(): String {
-        return REQUESTED_API_VERSION
-    }
+class ServerServiceProvider : BaseServiceProvider() {
 
     /**
      * Initialize the logging back-end.
      *
      *
      * **WARNING:** This method is intended to be called once by
-     * [LoggerFactory] class and from nowhere else.
+     * [org.slf4j.LoggerFactory] class and from nowhere else.
      *
      */
     override fun initialize() {
-        loggerContext = LokiLoggerContext()
-        val cAppender = ConsoleAppender("CONSOLE")
-        cAppender.setContext(loggerContext)
-        loggerContext.root.addAppender(cAppender)
-        val fAppender = FileAppender("FILE")
-        fAppender.setContext(loggerContext)
-        loggerContext.root.addAppender(fAppender)
-        mdcAdapter = LokiMDCAdapter()
-        markerFactory = BasicMarkerFactory()
+        super.initialize()
+
+        loggerContext.root.addAppender(
+            ConsoleAppender("CONSOLE").apply {
+                setEventBus(loggerContext)
+            },
+        )
+        val config = loggerContext.config
+        loggerContext.root.addAppender(
+            FileAppender(
+                loggerContext.config.logDirectory,
+                "FILE",
+            ).apply {
+                setEventBus(loggerContext)
+            },
+        )
+        MDC.put("topic", config.topic)
+        MDC.put("hostname", InetAddress.getLocalHost().hostName)
+        MDC.put("pid", ProcessHandle.current().pid().toString())
+        val env = System.getProperties().getProperty("spring.profiles.active", "dev")
+        MDC.put("env", env)
+        loggerContext.addReporter(
+            LogFileReporter(
+                config.logDirectory,
+                config.reportInterval,
+                sender = DefaultSender(),
+            )
+        )
     }
 }

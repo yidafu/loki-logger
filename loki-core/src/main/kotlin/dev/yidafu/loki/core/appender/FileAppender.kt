@@ -1,23 +1,29 @@
 package dev.yidafu.loki.core.appender
 
 import dev.yidafu.loki.core.ILogEvent
+import dev.yidafu.loki.core.appender.naming.DateFileNamingStrategy
+import dev.yidafu.loki.core.appender.naming.FileNamingStrategy
+import dev.yidafu.loki.core.appender.naming.NamingStrategyFactory
 import dev.yidafu.loki.core.codec.ICodec
 import dev.yidafu.loki.core.codec.LogCodec
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 
 class FileAppender(
+    private val logDir: String,
+    namingStrategyName: String,
+//    private val logFilePrefix: String,
     override var name: String = "FILE",
     override var encoder: ICodec<ILogEvent> = LogCodec,
+    private val namingStrategy: FileNamingStrategy = NamingStrategyFactory.getStrategy(namingStrategyName),
 ) : AsyncAppender<ILogEvent>() {
-    private val filenamePrefix = "loki_"
-
-//    private var logFile: File? = null
     private var outputStream: LogFileOutputStream? = null
+
+    private val logFilePath: String
+        get() = "$logDir/${namingStrategy.generate(0, System.currentTimeMillis())}.log"
+
     override fun onStart() {
         super.onStart()
-        val logFile = File("${filenamePrefix}_1.log")
+        val logFile = File(logFilePath)
         outputStream = LogFileOutputStream(logFile)
     }
 
@@ -25,15 +31,14 @@ class FileAppender(
         outputStream?.flush()
         outputStream?.close()
         super.onStop()
-
     }
+
     override fun filterLevel(event: ILogEvent): Boolean {
         return true
     }
 
-    override suspend fun asyncAppend(eventList: ArrayList<ILogEvent>) {
-        println("asyncAppend ${System.currentTimeMillis()}")
-        val evtStr = eventList.joinToString("\n") { encoder.encode(it) } + "\n"
+    override suspend fun asyncAppend(eventArray: ArrayList<ILogEvent>) {
+        val evtStr = eventArray.joinToString("\n") { encoder.encode(it) } + "\n"
 
         outputStream?.write(evtStr.toByteArray())
     }

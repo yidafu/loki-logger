@@ -9,10 +9,14 @@ import java.nio.channels.FileLock
 
 class LogFileOutputStream(private val file: File) : OutputStream() {
     private val outputStream: BufferedOutputStream
-    private val fileOutputStream: FileOutputStream = FileOutputStream(file, true)
+    private val fileOutputStream: FileOutputStream
     private val BUFFER_SIZE: Int = 8 * 1024
     private var pos: Int = 0
     init {
+        if (!file.parentFile.exists()) {
+            file.parentFile.mkdirs()
+        }
+        fileOutputStream = FileOutputStream(file, true)
         outputStream = BufferedOutputStream(fileOutputStream, BUFFER_SIZE)
     }
 
@@ -21,7 +25,6 @@ class LogFileOutputStream(private val file: File) : OutputStream() {
     }
 
     private fun safeWrite(buf: ByteArray) {
-        println("safe write")
         val channel = fileOutputStream.channel
         var fileLock: FileLock? = null
         try {
@@ -34,14 +37,14 @@ class LogFileOutputStream(private val file: File) : OutputStream() {
                     val restBuffLen = buf.size - bufIndex
                     if (restOSBufLen >= restBuffLen) { // OutputStream 剩余 osBuf 能够放下 buf
                         val bufEndIndex = buf.size
-                        val bufArr = buf.sliceArray(bufIndex..< bufEndIndex)
+                        val bufArr = buf.sliceArray(bufIndex..<bufEndIndex)
                         val bufLen = bufArr.size
                         write(bufArr, 0, bufLen)
                         pos += bufLen
                         bufIndex = bufEndIndex
                     } else {
                         val bufEndIndex = bufIndex + restOSBufLen
-                        val bufArr = buf.sliceArray(bufIndex..< bufEndIndex)
+                        val bufArr = buf.sliceArray(bufIndex..<bufEndIndex)
                         val bufLen = bufArr.size
                         write(bufArr, 0, bufLen)
                         pos += bufLen
@@ -58,12 +61,10 @@ class LogFileOutputStream(private val file: File) : OutputStream() {
                 // 直接 write 只需要一次
                 write(buf)
             }
-
         } catch (e: IOException) {
             println("LogFileOutputStream write byte array failed \n\t${e.stackTraceToString()}")
         } finally {
-                println("release fileLock")
-                fileLock?.release()
+            fileLock?.release()
         }
     }
     override fun write(b: ByteArray, off: Int, len: Int) {
@@ -81,8 +82,8 @@ class LogFileOutputStream(private val file: File) : OutputStream() {
      * Subclasses of `OutputStream` must provide an
      * implementation for this method.
      *
-     * @param      b   the `byte`.
-     * @throws     [java.io.IOException]  if an I/O error occurs. In particular,
+     * @param b   the `byte`.
+     * @throws [java.io.IOException]  if an I/O error occurs. In particular,
      * an `IOException` may be thrown if the
      * output stream has been closed.
      */

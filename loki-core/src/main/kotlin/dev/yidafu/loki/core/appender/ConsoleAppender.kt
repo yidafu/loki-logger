@@ -12,5 +12,7 @@ class ConsoleAppender(override var name: String) : SyncAppender<ILogEvent>() {
 
     override fun writeout(bytes: ByteArray) {
         outputStream.writeBytes(bytes)
+        outputStream.write('\n'.code)
+        outputStream.flush()
     }
 }

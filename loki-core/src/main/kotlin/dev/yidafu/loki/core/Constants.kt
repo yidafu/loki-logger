@@ -9,6 +9,7 @@ object Constants {
     const val TAG_LEVEL = "level"
     const val TAG_LOGGER_NAME = "name"
 
-    const val DEFAULT_CONFIG_FILENAME = "loki.yml"
-    const val CONFIG_FILE_PROPERTY = "loki.configFile"
+    const val CONFIG_FILE_PROPERTY = "dev.yidafu.loki.config-file"
+    const val DEFAULT_CONFIG_FILENAME = "loki.yaml"
+//    const val CONFIG_FILE_PROPERTY = "loki.configFile"
 }

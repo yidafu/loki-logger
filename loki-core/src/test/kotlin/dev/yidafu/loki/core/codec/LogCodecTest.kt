@@ -2,12 +2,12 @@ package dev.yidafu.loki.core.codec
 
 import dev.yidafu.loki.core.Level
 import dev.yidafu.loki.core.LokiLogEvent
-import org.junit.jupiter.api.Test
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 import kotlin.test.assertEquals
 
-class LogCodecTest {
-    @Test
-    fun codecTest() {
+class LogCodecTest : FunSpec({
+    test("codec test case") {
         val event = LokiLogEvent(
             1693232661802L,
             "topic",
@@ -17,13 +17,15 @@ class LogCodecTest {
             Level.Info,
             "TestTag",
             mapOf("key" to "value", "key2" to "value2"),
-            "message",
+            "message [key:value]\nxxx",
         )
 
         val log = LogCodec.encode(event)
-        assertEquals("1693232661802 <topic> <local-hostname> <1234> <dev> INFO (TestTag) [key:value] [key2:value2] - message", log)
+        assertEquals("1693232661802 <topic> <local-hostname> <1234> <dev> INFO (TestTag) [key:value] [key2:value2] - message [key:value]\\nxxx", log)
 
         val event2 = LogCodec.decode(log)
-        assertEquals(event, event2)
+        event.toString() shouldBe  event2.toString()
     }
-}
+})
+
+
