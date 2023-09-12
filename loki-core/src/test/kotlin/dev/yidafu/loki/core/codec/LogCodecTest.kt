@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class LogCodecTest : FunSpec({
     test("codec test case") {
         val event = LokiLogEvent(
-            1693232661802L,
+            "1693232661802L",
             "topic",
             "local-hostname",
             "1234",

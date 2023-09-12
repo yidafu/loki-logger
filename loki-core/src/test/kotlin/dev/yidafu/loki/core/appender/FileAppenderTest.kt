@@ -34,7 +34,7 @@ class FileAppenderTest {
             val appender = FileAppender("/tmp/log/loki", "date")
             appender.onStart()
             val event = LokiLogEvent(
-                1693232661802L,
+                "1693232661802L",
                 "topic",
                 "local-hostname",
                 "1234",

@@ -67,18 +67,9 @@ class LogFileReporter(
                 if (!isStarted()) break
                 metaFile.getNeedReportFiles().forEach {
                     val stream = getStream(it)
-                    var line: String = ""
-                    val logs = mutableListOf<String>()
-                    while (stream.readLine().also { l ->
-                            if (l != null) {
-                                line = l
-                            }
-                        } != null) {
-                        println("read line")
-                        println(line)
-                        it.pointer += line.length + 1 // 1 is '\n'
-                        logs.add(line)
-                    }
+                    val logs = stream.readLines()
+
+                    it.pointer += logs.fold(logs.size) { acc, s -> acc + s.length }
                     report(logs)
                 }
                 metaFile.updateMateFile()

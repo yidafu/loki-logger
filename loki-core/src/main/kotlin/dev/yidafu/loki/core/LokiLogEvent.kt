@@ -13,6 +13,7 @@ class LokiLogEvent(
     override val tagMap: Map<String, String>,
     override val message: String,
 ) : ILogEvent {
+
     val uniqueKey by lazy {
         StringBuilder().apply {
             append(topic)

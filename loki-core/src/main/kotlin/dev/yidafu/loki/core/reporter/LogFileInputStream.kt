@@ -1,36 +1,49 @@
 package dev.yidafu.loki.core.reporter
 
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.InputStream
 
 class LogFileInputStream(
     private val file: File,
-    private val offset: Long,
-): InputStream() {
-    private val BUFFERED_SIZE = 8 * 1024;
-    private val fileInputStream = FileInputStream(file)
-    private val steamReader = InputStreamReader(fileInputStream)
-    private val bufferedRead = BufferedReader(steamReader, BUFFERED_SIZE)
-    /**
-     * Reads the next byte of data from the input stream. The value byte is
-     * returned as an `int` in the range `0` to
-     * `255`. If no byte is available because the end of the stream
-     * has been reached, the value `-1` is returned. This method
-     * blocks until input data is available, the end of the stream is detected,
-     * or an exception is thrown.
-     *
-     *
-     *  A subclass must provide an implementation of this method.
-     *
-     * @return     the next byte of data, or `-1` if the end of the
-     * stream is reached.
-     * @throws     [java.io.IOException]  if an I/O error occurs.
-     */
-    override fun read(): Int {
-        return bufferedRead.read()
+    offset: Long,
+    private val bufferedSize: Int = 8 * 1024,
+    private val fileInputStream: FileInputStream = FileInputStream(file),
+    private val inputStream: BufferedInputStream = BufferedInputStream(fileInputStream, bufferedSize),
+) : InputStream() {
+
+    private val lineBuilder = StringBuilder()
+
+    init {
+        inputStream.skip(offset)
     }
 
-    fun readLine(): String? {
-        bufferedRead.skip(offset)
-        return bufferedRead.readLine()
+    override fun read(): Int {
+        return inputStream.read()
+    }
+
+    override fun read(b: ByteArray, off: Int, len: Int): Int {
+        return inputStream.read(b, off, len)
+    }
+
+    fun readLines(): List<String> {
+        var char: Char
+        val lines = mutableListOf<String>()
+        while (read().also { char = it.toChar() } != -1) {
+            if (char == '\n') {
+                val line = lineBuilder.toString()
+                lines.add(line)
+                lineBuilder.clear()
+            } else {
+                lineBuilder.append(char)
+            }
+        }
+
+        return lines
+    }
+
+    override fun close() {
+        inputStream.close()
     }
 }
