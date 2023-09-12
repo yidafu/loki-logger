@@ -1,15 +1,20 @@
 package dev.yidafu.loki.core
 
+import dev.yidafu.loki.core.config.Configuration
 import dev.yidafu.loki.core.listener.EventBus
 import dev.yidafu.loki.core.listener.EventBusDelegate
+import dev.yidafu.loki.core.reporter.Reporter
 import org.slf4j.ILoggerFactory
 import org.slf4j.Logger
 import java.util.concurrent.ConcurrentHashMap
 
 class LokiLoggerContext : ILoggerFactory, EventBus by EventBusDelegate {
     private val loggerMap: MutableMap<String, LokiLogger> = ConcurrentHashMap()
+    lateinit var config: Configuration
 
     val root: LokiLogger = LokiLogger(LokiLogger.ROOT_LOGGER_NAME)
+    val reporters = mutableListOf<Reporter>()
+
     init {
         loggerMap[root.name] = root
         root.level = Level.Debug
@@ -68,10 +73,13 @@ class LokiLoggerContext : ILoggerFactory, EventBus by EventBusDelegate {
             }
     }
 
+    fun addReporter(reporter: Reporter) {
+        reporters.add(reporter)
+        reporter.setEventBus(this)
+    }
     fun start() {
         emitStart()
     }
-
 
     fun stop() {
         emitStop()

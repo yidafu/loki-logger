@@ -31,10 +31,10 @@ class FileAppenderTest {
     @Test
     fun testFileAppender() {
         runBlocking {
-            val appender = FileAppender()
+            val appender = FileAppender("/tmp/log/loki", "date")
             appender.onStart()
             val event = LokiLogEvent(
-                1693232661802L,
+                "1693232661802L",
                 "topic",
                 "local-hostname",
                 "1234",
@@ -52,6 +52,5 @@ class FileAppenderTest {
             println("stop appender")
             appender.onStop()
         }
-
     }
 }

@@ -1,16 +1,16 @@
 package dev.yidafu.loki.core
 
-import dev.yidafu.loki.core.initializer.ContextInitializer
+import dev.yidafu.loki.core.config.Configurator
 import org.slf4j.ILoggerFactory
 import org.slf4j.IMarkerFactory
 import org.slf4j.helpers.BasicMarkerFactory
 import org.slf4j.spi.MDCAdapter
 import org.slf4j.spi.SLF4JServiceProvider
 
-class LokiServiceProvider : SLF4JServiceProvider {
-    private lateinit var loggerFactory: ILoggerFactory
-    private lateinit var markerFactory: BasicMarkerFactory
-    private lateinit var mdcAdapter: LokiMDCAdapter
+open class BaseServiceProvider : SLF4JServiceProvider {
+    protected lateinit var loggerContext: LokiLoggerContext
+    protected lateinit var markerFactory: BasicMarkerFactory
+    protected lateinit var mdcAdapter: LokiMDCAdapter
 
     private val REQUESTED_API_VERSION = "2.99.99"
 
@@ -21,7 +21,7 @@ class LokiServiceProvider : SLF4JServiceProvider {
      * @return instance of [ILoggerFactory]
      */
     override fun getLoggerFactory(): ILoggerFactory {
-        return loggerFactory
+        return loggerContext
     }
 
     /**
@@ -58,7 +58,7 @@ class LokiServiceProvider : SLF4JServiceProvider {
     }
 
     private fun initializeLoggerContext() {
-        ContextInitializer(loggerFactory).autoConfig()
+        Configurator(loggerContext).autoConfig()
     }
 
     /**
@@ -70,7 +70,7 @@ class LokiServiceProvider : SLF4JServiceProvider {
      *
      */
     override fun initialize() {
-        loggerFactory = LokiLoggerContext()
+        loggerContext = LokiLoggerContext()
         mdcAdapter = LokiMDCAdapter()
         markerFactory = BasicMarkerFactory()
 

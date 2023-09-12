@@ -1,8 +1,8 @@
 package dev.yidafu.loki.core.appender
 
 import dev.yidafu.loki.core.ILogEvent
-import dev.yidafu.loki.core.LokiLoggerContext
 import dev.yidafu.loki.core.codec.ICodec
+import dev.yidafu.loki.core.listener.EventBus
 
 abstract class BaseAppender<E> : Appender<E> {
     private var _isStarted = false
@@ -16,10 +16,9 @@ abstract class BaseAppender<E> : Appender<E> {
 
     override fun onStop() {
         _isStarted = false
-        println("appender stopped")
     }
 
-    fun setContext(context: LokiLoggerContext) {
-        context.addListener(this)
+    override fun setEventBus(bus: EventBus) {
+        bus.addListener(this)
     }
 }

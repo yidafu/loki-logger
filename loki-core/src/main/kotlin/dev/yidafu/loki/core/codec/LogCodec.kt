@@ -25,7 +25,7 @@ object LogCodec : ICodec<ILogEvent> {
                 append("[$key:$value] ")
             }
             append("- ")
-            append(event.message)
+            append(event.message.replace("\n", "\\n"))
         }.toString()
     }
 
@@ -53,27 +53,35 @@ object LogCodec : ICodec<ILogEvent> {
 
         var leftIndex: Int = loggerIndex
         val tagMap = mutableMapOf<String, String>()
-        while (raw.indexOf('[', leftIndex).also { leftIndex = it } != -1) {
+        while (raw[leftIndex + 1] == '[') {
             val rightIndex = raw.indexOf(']', leftIndex)
-            val pair = raw.slice((leftIndex + 1)..<rightIndex)
+            val pair = raw.slice((leftIndex + 2)..<rightIndex)
             val (key, value) = pair.split(':')
             tagMap[key] = value
-            leftIndex = rightIndex
+            leftIndex = rightIndex + 1
         }
         val msgLeftIndex = leftIndex.coerceAtLeast(loggerIndex) + 1
         val msgIndex = raw.indexOf('-', msgLeftIndex)
-        val msg = raw.slice((msgIndex + 2)..<raw.length)
-        return LokiLogEvent(
-            timestamp.toLong(),
-            topic,
-            hostname,
-            pid,
-            env,
-            Level.from(level),
-            loggerName,
-            tagMap,
-            msg,
-        )
+        val msg = raw.slice((msgIndex + 2)..< raw.length).replace("\\n", "\n")
+        try {
+            return LokiLogEvent(
+                timestamp,
+                topic,
+                hostname,
+                pid,
+                env,
+                Level.from(level),
+                loggerName,
+                tagMap,
+                msg,
+            )
+        } catch (e: Throwable) {
+            println()
+            println(raw)
+            println()
+            throw  e
+        }
+
     }
 
     private const val WHITESPACE = ' '

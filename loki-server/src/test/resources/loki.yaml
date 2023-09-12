@@ -1,0 +1,2 @@
+topic: "test-app"
+log-dir: "/tmp/log/test-loki"

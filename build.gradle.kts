@@ -7,7 +7,8 @@ plugins {
     kotlin("jvm") apply false
     id("org.jlleitschuh.gradle.ktlint") apply false
     id("com.android.library") apply false
-    id("org.jetbrains.kotlin.android") apply false
+    kotlin("android") apply false
+    kotlin("plugin.serialization") apply false
 }
 allprojects {
     repositories {

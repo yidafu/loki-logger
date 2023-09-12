@@ -13,9 +13,12 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
     }
 
     override fun onStop() {
-        super.onStop()
+        CoroutineScope(Dispatchers.IO).launch {
+            flush()
+        }
         eventLoopJob?.cancel()
         eventLoopJob = null
+        super.onStop()
     }
 
     abstract fun filterLevel(event: E): Boolean
@@ -29,6 +32,23 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
             add(event)
         }
     }
+    private suspend fun flush() {
+        val iter = queue.iterator()
+        val bufferArray = ArrayList<E>(20)
+        while (iter.hasNext()) {
+            val event = iter.next()
+            bufferArray.add(event)
+            iter.remove()
+            if (bufferArray.size == 20) {
+                asyncAppend(bufferArray)
+                bufferArray.clear()
+            }
+        }
+        if (bufferArray.isNotEmpty()) {
+            asyncAppend(bufferArray)
+            bufferArray.clear()
+        }
+    }
 
     abstract suspend fun asyncAppend(eventArray: ArrayList<E>)
 
@@ -39,21 +59,7 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
                     break
                 }
                 delay(16)
-                val iter = queue.iterator()
-                val bufferArray = ArrayList<E>(20)
-                while (iter.hasNext()) {
-                    val event = iter.next()
-                    bufferArray.add(event)
-                    iter.remove()
-                    if (bufferArray.size == 20) {
-                        asyncAppend(bufferArray)
-                        bufferArray.clear()
-                    }
-                }
-                if (bufferArray.isNotEmpty()) {
-                    asyncAppend(bufferArray)
-                    bufferArray.clear()
-                }
+                flush()
             }
         }
     }

@@ -1,7 +1,7 @@
 package dev.yidafu.loki.core
 
 interface ILogEvent {
-    abstract val timestamp: Long
+    abstract val timestamp: String
 
     abstract val topic: String
 

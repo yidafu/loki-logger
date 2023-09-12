@@ -143,7 +143,7 @@ class LokiLogger(
     }
 
     override fun getFullyQualifiedCallerName(): String {
-        return "ev.yidafu.loki.core.LokiLogger"
+        return "dev.yidafu.loki.core.LokiLogger"
     }
 
     /**

@@ -6,4 +6,6 @@ interface EventListener {
     fun isStarted(): Boolean
 
     fun onStop()
+
+    fun setEventBus(bus: EventBus)
 }

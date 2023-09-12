@@ -58,7 +58,7 @@ sealed class Level(
         }
         fun from(code: Int): Level {
             return when (code) {
-                 OFF_INT -> Off
+                OFF_INT -> Off
                 TRACE_INT -> Trace
                 INFO_INT -> Info
                 DEBUG_INT -> Debug
