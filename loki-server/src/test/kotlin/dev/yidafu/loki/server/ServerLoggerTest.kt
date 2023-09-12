@@ -14,6 +14,7 @@ class ServerLoggerTest {
             val loggerContext = LoggerFactory.getILoggerFactory() as LokiLoggerContext
 
             loggerContext.start()
+            loggerContext.startReporters()
             val logger = LoggerFactory.getLogger(ServerLoggerTest::class.java)
             val var1 = 1234
             repeat(10) {
@@ -24,6 +25,7 @@ class ServerLoggerTest {
                 logger.info("Suppressed: kotlinx.coroutines.internal.DiagnosticCoroutineContextException: [CoroutineId(2), \"coroutine#2\":StandaloneCoroutine{Cancelling}@72ebba7b, Dispatchers.IO]")
             }
             delay(10 * 1000)
+            loggerContext.startReporters()
             loggerContext.stop()
         }
     }

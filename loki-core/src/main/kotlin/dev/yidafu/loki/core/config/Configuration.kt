@@ -9,7 +9,7 @@ data class Configuration(
     val topic: String = "unknown",
 
     @SerialName("log-dir")
-    val logDirectory: String  = "/tmp/log/loki",
+    val logDirectory: String = "/tmp/log/loki",
 
     @SerialName("http-endpoint")
     val httpEndpoint: String = "http://localhost:3000/loki/api/v1/push",

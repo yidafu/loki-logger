@@ -9,6 +9,8 @@ plugins {
     id("com.android.library") apply false
     kotlin("android") apply false
     kotlin("plugin.serialization") apply false
+    `maven-publish`
+    id("org.jetbrains.dokka") version "1.9.0"
 }
 allprojects {
     repositories {
@@ -24,10 +26,11 @@ allprojects {
 subprojects {
 //    apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
-
+    apply(plugin = "org.jetbrains.dokka")
 //    tasks.withType<KotlinCompile> {
 //        kotlinOptions.jvmTarget = "1.8"
 //    }
+
 
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         version.set("0.50.0")

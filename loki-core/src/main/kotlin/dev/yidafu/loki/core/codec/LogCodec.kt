@@ -62,7 +62,7 @@ object LogCodec : ICodec<ILogEvent> {
         }
         val msgLeftIndex = leftIndex.coerceAtLeast(loggerIndex) + 1
         val msgIndex = raw.indexOf('-', msgLeftIndex)
-        val msg = raw.slice((msgIndex + 2)..< raw.length).replace("\\n", "\n")
+        val msg = raw.slice((msgIndex + 2)..<raw.length).replace("\\n", "\n")
         try {
             return LokiLogEvent(
                 timestamp,
@@ -79,9 +79,8 @@ object LogCodec : ICodec<ILogEvent> {
             println()
             println(raw)
             println()
-            throw  e
+            throw e
         }
-
     }
 
     private const val WHITESPACE = ' '

@@ -21,11 +21,9 @@ class LogCodecTest : FunSpec({
         )
 
         val log = LogCodec.encode(event)
-        assertEquals("1693232661802 <topic> <local-hostname> <1234> <dev> INFO (TestTag) [key:value] [key2:value2] - message [key:value]\\nxxx", log)
+        assertEquals("1693232661802L <topic> <local-hostname> <1234> <dev> INFO (TestTag) [key:value] [key2:value2] - message [key:value]\\nxxx", log)
 
         val event2 = LogCodec.decode(log)
-        event.toString() shouldBe  event2.toString()
+        event.toString() shouldBe event2.toString()
     }
 })
-
-

@@ -13,6 +13,5 @@ class LokiStreamTest : FunSpec({
     test("escape chars: \\\", \n \t ") {
         val str = LokiStream(mapOf("k\"ey" to "value"), arrayOf(arrayOf("1694521198868", "\tlog\nmessage"))).toString()
         str shouldBe "{\"stream\":{\"k\\\"ey\":\"value\"},\"values\":[[\"1694521198868\",\"\\tlog\\nmessage\"]]}"
-
     }
 })

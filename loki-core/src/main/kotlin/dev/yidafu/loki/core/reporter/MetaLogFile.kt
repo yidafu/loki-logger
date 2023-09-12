@@ -30,7 +30,7 @@ class LogMetaFile(private val logDirectory: String) : Closeable {
             val jsonStr = StringBuilder()
             var len = 0
             while (reader.read(buf).also { len = it } != -1) {
-                jsonStr.append(String(buf.sliceArray(0 ..< len)))
+                jsonStr.append(String(buf.sliceArray(0..<len)))
             }
 
             meteFieList = Json.decodeFromString<MutableList<LogMeta>>(if (jsonStr.isEmpty()) "[]" else jsonStr.toString())
@@ -47,7 +47,7 @@ class LogMetaFile(private val logDirectory: String) : Closeable {
         dir.listFiles()?.filterNotNull()
             ?.filter { it.isFile && it.extension == "log" }
             ?.forEach {
-                if (!meteFieList.any { f -> f.filepath == it.absolutePath}) {
+                if (!meteFieList.any { f -> f.filepath == it.absolutePath }) {
                     // TODO: 暂时不支持 inode
                     fileList.add(LogMeta(it.absolutePath, 0, 0))
                 }

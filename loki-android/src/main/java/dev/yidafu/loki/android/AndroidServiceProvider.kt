@@ -26,7 +26,7 @@ class AndroidServiceProvider : BaseServiceProvider() {
         loggerContext.root.addAppender(
             FileAppender(config.logDirectory, config.namingStrategy).apply {
                 setEventBus(loggerContext)
-            }
+            },
         )
         MDC.put("topic", config.topic)
     }

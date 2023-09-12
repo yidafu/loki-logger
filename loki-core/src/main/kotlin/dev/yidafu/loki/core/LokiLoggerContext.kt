@@ -75,8 +75,16 @@ class LokiLoggerContext : ILoggerFactory, EventBus by EventBusDelegate {
 
     fun addReporter(reporter: Reporter) {
         reporters.add(reporter)
-        reporter.setEventBus(this)
     }
+
+    fun startReporters() {
+        reporters.forEach { it.onStart() }
+    }
+
+    fun stopReporters() {
+        reporters.forEach { it.onStop() }
+    }
+
     fun start() {
         emitStart()
     }

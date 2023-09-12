@@ -17,7 +17,7 @@ class LogFileReporter(
     private val reportInterval: Long,
 
     private val codec: ICodec<ILogEvent> = LogCodec,
-    private val sender: Sender
+    private val sender: Sender,
 ) : Reporter, Closeable {
 
     private lateinit var metaFile: LogMetaFile
@@ -29,7 +29,7 @@ class LogFileReporter(
     private val logStreamMap = mutableMapOf<String, LogFileInputStream>()
 
     private fun getStream(logMeta: LogMeta): LogFileInputStream {
-         return logStreamMap[logMeta.filepath] ?: run {
+        return logStreamMap[logMeta.filepath] ?: run {
             val stream = LogFileInputStream(logMeta.logFile, logMeta.pointer)
             logStreamMap[logMeta.filepath] = stream
             stream
@@ -40,7 +40,7 @@ class LogFileReporter(
         if (logList.isEmpty()) return
 
         val streams = logList.map { codec.decode(it) }
-            .map { it as LokiLogEvent}
+            .map { it as LokiLogEvent }
             // 压缩 log
             .groupBy { it.uniqueKey }
             .values.map {
@@ -74,7 +74,6 @@ class LogFileReporter(
                 }
                 metaFile.updateMateFile()
             }
-
         }
     }
 

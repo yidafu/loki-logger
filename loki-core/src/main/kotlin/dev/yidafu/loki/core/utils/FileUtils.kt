@@ -3,13 +3,11 @@ package dev.yidafu.loki.core.utils
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
-import java.util.*
-
 
 object FileUtils {
     @Suppress("NewApi")
     @Throws(IOException::class)
-    fun getINode(file: File): Long /* , SecurityException */ {
+    fun getINode(file: File): Long {
         return try {
             val inode: Any? = Files.getAttribute(file.toPath(), "unix:ino")
             if (inode is Long) inode else file.absoluteFile.hashCode().toLong()

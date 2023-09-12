@@ -1,7 +1,6 @@
 package dev.yidafu.loki.core.appender
 
 import dev.yidafu.loki.core.ILogEvent
-import dev.yidafu.loki.core.appender.naming.DateFileNamingStrategy
 import dev.yidafu.loki.core.appender.naming.FileNamingStrategy
 import dev.yidafu.loki.core.appender.naming.NamingStrategyFactory
 import dev.yidafu.loki.core.codec.ICodec

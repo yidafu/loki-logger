@@ -38,20 +38,20 @@ class LokiLogEvent(
             "pid" to pid,
             "env" to env,
             "level" to level.toString(),
-            "name" to loggerName
+            "name" to loggerName,
         ) + tagMap
     }
     override fun equals(other: Any?): Boolean {
         if (other is LokiLogEvent) {
-            return timestamp == other.timestamp
-                    || topic == other.topic
-                    || hostname == other.hostname
-                    || pid == other.pid
-                    || env == other.env
-                    || level == other.level
-                    || loggerName == other.loggerName
-                    || message == other.message
-                    || tagMap == other.tagMap
+            return timestamp == other.timestamp ||
+                topic == other.topic ||
+                hostname == other.hostname ||
+                pid == other.pid ||
+                env == other.env ||
+                level == other.level ||
+                loggerName == other.loggerName ||
+                message == other.message ||
+                tagMap == other.tagMap
         }
         return false
     }
