@@ -54,7 +54,7 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
 
     private fun startEventLoop() {
         eventLoopJob = CoroutineScope(Dispatchers.IO).launch {
-            while (true) {
+            while (isActive) {
                 if (!isStarted()) {
                     break
                 }
