@@ -2,6 +2,9 @@ package dev.yidafu.loki.core
 
 import org.slf4j.MDC
 
+/**
+ * ILogEvent Implement
+ */
 class LokiLogEvent(
     override val timestamp: String,
     override val topic: String,
@@ -31,6 +34,10 @@ class LokiLogEvent(
             append(tagMap.values.joinToString(","))
         }.toString()
     }
+
+    /**
+     * return all label. topic/hostname/pid/env/level/name is default label.
+     */
     fun getMap(): Map<String, String> {
         return mapOf(
             "topic" to topic,
@@ -71,6 +78,9 @@ class LokiLogEvent(
     }
 
     companion object {
+        /**
+         * create LokiLogEvent
+         */
         fun create(level: Level, loggerName: String, message: String): LokiLogEvent {
             val timestamp = System.currentTimeMillis()
             val map = MDC.getCopyOfContextMap()

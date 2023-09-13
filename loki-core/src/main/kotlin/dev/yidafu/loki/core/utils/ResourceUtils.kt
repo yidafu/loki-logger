@@ -2,7 +2,7 @@ package dev.yidafu.loki.core.utils
 
 import java.io.File
 
-object ResourceUtils {
+internal object ResourceUtils {
     fun readResource(name: String): String {
         val url = ResourceUtils::class.java.classLoader.getResource(name)
         requireNotNull(url) {

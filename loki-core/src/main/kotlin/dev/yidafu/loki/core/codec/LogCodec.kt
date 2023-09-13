@@ -4,7 +4,14 @@ import dev.yidafu.loki.core.ILogEvent
 import dev.yidafu.loki.core.Level
 import dev.yidafu.loki.core.LokiLogEvent
 
+/**
+ * ILogEvent <=> Strings
+ */
 object LogCodec : ICodec<ILogEvent> {
+    /**
+     * transform [ILogEvent] to **one** line String.
+     * [ILogEvent.message] will replace '\n' to '\\n'
+     */
     override fun encode(event: ILogEvent): String {
         return StringBuilder().apply {
             append(event.timestamp)
@@ -29,6 +36,14 @@ object LogCodec : ICodec<ILogEvent> {
         }.toString()
     }
 
+    /**
+     * decode string to [ILogEvent]
+     *
+     * String format
+     * ```
+     * timestamp <topic> <hostname/machine id> <pid/thread name> <env> Level (tag name) [key:value] [key:value] - message content
+     * ````
+     */
     override fun decode(raw: String): ILogEvent {
         val firstWhitespace = raw.indexOf(WHITESPACE)
         val timestamp = raw.slice(0..<firstWhitespace)

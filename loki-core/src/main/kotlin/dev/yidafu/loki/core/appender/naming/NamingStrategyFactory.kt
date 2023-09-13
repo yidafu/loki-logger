@@ -1,5 +1,9 @@
 package dev.yidafu.loki.core.appender.naming
 
+/**
+ * only one strategy in Factory.
+ * + [DateFileNamingStrategy]
+ */
 object NamingStrategyFactory {
     private val strategyMap = mutableMapOf<String, FileNamingStrategy>()
 

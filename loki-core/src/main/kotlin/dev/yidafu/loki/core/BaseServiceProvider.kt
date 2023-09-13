@@ -57,7 +57,7 @@ open class BaseServiceProvider : SLF4JServiceProvider {
         return REQUESTED_API_VERSION
     }
 
-    private fun initializeLoggerContext() {
+    protected fun initializeLoggerContext() {
         Configurator(loggerContext).autoConfig()
     }
 
@@ -74,6 +74,5 @@ open class BaseServiceProvider : SLF4JServiceProvider {
         mdcAdapter = LokiMDCAdapter()
         markerFactory = BasicMarkerFactory()
 
-        initializeLoggerContext()
     }
 }

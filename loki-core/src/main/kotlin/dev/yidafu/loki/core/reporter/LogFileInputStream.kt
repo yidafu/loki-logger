@@ -5,6 +5,9 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
 
+/**
+ * log file input stream
+ */
 class LogFileInputStream(
     private val file: File,
     offset: Long,
@@ -27,6 +30,9 @@ class LogFileInputStream(
         return inputStream.read(b, off, len)
     }
 
+    /**
+     * read all lines that recently added to log file
+     */
     fun readLines(): List<String> {
         var char: Char
         val lines = mutableListOf<String>()

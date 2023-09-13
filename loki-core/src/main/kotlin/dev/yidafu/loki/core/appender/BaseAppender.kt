@@ -4,6 +4,9 @@ import dev.yidafu.loki.core.ILogEvent
 import dev.yidafu.loki.core.codec.ICodec
 import dev.yidafu.loki.core.listener.EventBus
 
+/**
+ * implement [dev.yidafu.loki.core.listener.EventListener] interface
+ */
 abstract class BaseAppender<E> : Appender<E> {
     private var _isStarted = false
 

@@ -11,6 +11,9 @@ import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
 
+/**
+ * write log to file
+ */
 class FileAppender(
     private val logDir: String,
     namingStrategyName: String,

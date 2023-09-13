@@ -1,6 +1,9 @@
 package dev.yidafu.loki.core.list
 
-class LinkedRingList<E>(override val size: Int) : Queue<E> {
+/**
+ * Linked Ring List
+ */
+internal class LinkedRingList<E>(override val size: Int) : Queue<E> {
     class Node<E>(
         internal var item: E?,
         internal var prev: Node<E>? = null,

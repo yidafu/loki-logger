@@ -3,6 +3,10 @@ package dev.yidafu.loki.core.appender
 import dev.yidafu.loki.core.list.LinkedRingList
 import kotlinx.coroutines.*
 
+/**
+ * push [dev.yidafu.loki.core.ILogEvent] to [queue] first. then per 16ms will consume all queue data.
+ *
+ */
 abstract class AsyncAppender<E> : BaseAppender<E>() {
     private val queue: LinkedRingList<E> = LinkedRingList(1024)
 
@@ -21,6 +25,9 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
         super.onStop()
     }
 
+    /**
+     * TODO: [event] need filter
+     */
     abstract fun filterLevel(event: E): Boolean
 
     private fun add(event: E) {
@@ -50,6 +57,10 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
         }
     }
 
+
+    /**
+     * async append eventArray
+     */
     abstract suspend fun asyncAppend(eventArray: ArrayList<E>)
 
     private fun startEventLoop() {

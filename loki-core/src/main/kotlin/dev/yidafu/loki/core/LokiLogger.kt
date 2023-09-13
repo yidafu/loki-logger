@@ -6,16 +6,15 @@ import org.slf4j.Marker
 import org.slf4j.helpers.AbstractLogger
 import org.slf4j.helpers.MessageFormatter
 
+/**
+ * LokiLogger extends [org.slf4j.helpers.AbstractLogger].
+ */
 class LokiLogger(
     private val _name: String,
     private val parent: LokiLogger? = null,
     private val children: MutableList<LokiLogger> = mutableListOf(),
 ) : AbstractLogger(),
     AppenderAttachable<ILogEvent> by AppenderAttachableImpl() {
-
-//    private val appendAttachableImpl: AppenderAttachable<ILogEvent> by lazy {
-//        AppenderAttachableImpl()
-//    }
 
     private var logLevel: Level = Level.Info
 
@@ -199,6 +198,9 @@ class LokiLogger(
         return childLogger
     }
     companion object {
+        /**
+         * root logger name.
+         */
         const val ROOT_LOGGER_NAME = "@ROOT@"
     }
 }

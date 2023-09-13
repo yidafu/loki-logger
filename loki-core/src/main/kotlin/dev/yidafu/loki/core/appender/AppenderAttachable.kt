@@ -1,6 +1,6 @@
 package dev.yidafu.loki.core.appender
 
-interface AppenderAttachable<E> {
+internal interface AppenderAttachable<E> {
     fun addAppender(appender: Appender<E>)
 
     fun getAppender(name: String): Appender<E>

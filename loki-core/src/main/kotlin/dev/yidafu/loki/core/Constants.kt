@@ -1,6 +1,6 @@
 package dev.yidafu.loki.core
 
-object Constants {
+internal object Constants {
     const val TAG_TIMESTAMP = "timestamp"
     const val TAG_TOPIC = "topic"
     const val TAG_HOSTNAME = "hostname"

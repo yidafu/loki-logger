@@ -1,5 +1,8 @@
 package dev.yidafu.loki.core.listener
 
+/**
+ * implement simple event bus
+ */
 object EventBusDelegate : EventBus {
     private val listenerList = mutableListOf<EventListener>()
     override fun addListener(listener: EventListener) {

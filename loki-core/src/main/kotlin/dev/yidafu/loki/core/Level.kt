@@ -3,6 +3,9 @@ package dev.yidafu.loki.core
 import org.slf4j.event.EventConstants
 import java.lang.IllegalArgumentException
 
+/**
+ * Log Level
+ */
 sealed class Level(
     private val code: Int,
     private val level: String,

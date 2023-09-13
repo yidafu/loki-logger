@@ -2,7 +2,7 @@ package dev.yidafu.loki.core.appender
 
 import java.util.concurrent.CopyOnWriteArrayList
 
-class AppenderAttachableImpl<E> : AppenderAttachable<E> {
+internal class AppenderAttachableImpl<E> : AppenderAttachable<E> {
     private val appenderList = CopyOnWriteArrayList<Appender<E>>()
 
     override fun addAppender(appender: Appender<E>) {

@@ -4,8 +4,8 @@ import dev.yidafu.loki.core.ILogEvent
 
 abstract class SyncAppender<E : ILogEvent> : BaseAppender<E>() {
 
-    abstract fun writeout(bytes: ByteArray)
+    abstract fun writeOut(bytes: ByteArray)
     override fun doAppend(event: E) {
-        writeout(encoder.encode(event).toByteArray())
+        writeOut(encoder.encode(event).toByteArray())
     }
 }

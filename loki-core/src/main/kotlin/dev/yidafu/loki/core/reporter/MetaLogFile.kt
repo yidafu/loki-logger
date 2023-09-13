@@ -8,9 +8,11 @@ import java.io.FileReader
 import java.io.RandomAccessFile
 
 /**
- * 暂时支持今天的日志文件
+ * instance of `meta.json`
+ *
+ * constructor class will create a File instance of `meta.json`
  */
-class LogMetaFile(private val logDirectory: String) : Closeable {
+internal class LogMetaFile(private val logDirectory: String) : Closeable {
     private val metaFilename = "meta.json"
     private val closed = false
     private val filepath
@@ -57,12 +59,18 @@ class LogMetaFile(private val logDirectory: String) : Closeable {
         updateMateFile()
     }
 
+    /**
+     * get LogMeta list that has new content to report
+     */
     fun getNeedReportFiles(): List<LogMeta> {
         return meteFieList.filter {
             it.isReport()
         }
     }
 
+    /**
+     * write data to `meta.json`
+     */
     fun updateMateFile() {
         if (output.fd.valid()) {
             output.seek(0)

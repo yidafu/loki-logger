@@ -14,7 +14,7 @@ class Configurator(
     }
 
     /**
-     *
+     * read config file in resources/loki.yaml
      */
     fun autoConfig() {
         val configContext = ResourceUtils.readResource(configFilePath)

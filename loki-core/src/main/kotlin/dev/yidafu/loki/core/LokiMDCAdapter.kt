@@ -4,8 +4,7 @@ import org.slf4j.spi.MDCAdapter
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 
-class LokiMDCAdapter : MDCAdapter {
-    private val defineMap = ConcurrentHashMap<String, String>()
+internal class LokiMDCAdapter : MDCAdapter {
     private val contextMap = ConcurrentHashMap<String, String>()
 
     /**
