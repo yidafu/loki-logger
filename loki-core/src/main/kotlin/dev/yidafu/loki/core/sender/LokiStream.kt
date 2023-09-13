@@ -100,7 +100,7 @@ data class LokiStream(
                 append(",")
                 printQuoted(strings[1])
                 append("]")
-                if (index != labels.size - 1) {
+                if (index != values.size - 1) {
                     append(",")
                 }
             }
