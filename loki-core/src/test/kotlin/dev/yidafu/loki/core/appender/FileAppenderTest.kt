@@ -9,11 +9,9 @@ import kotlinx.coroutines.runBlocking
 import java.io.BufferedOutputStream
 import java.io.File
 import java.io.FileOutputStream
-import kotlin.test.Test
 
 class FileAppenderTest : FunSpec({
     val targetDir = "/tmp/log/test-file-appender"
-
 
     beforeEach {
         File(targetDir).deleteRecursively()
@@ -61,21 +59,22 @@ class FileAppenderTest : FunSpec({
         }
     }
 
-
     test("fix timed log file cleaner") {
         val appender = FileAppender(targetDir, "date", 300, 500)
         appender.onStart()
-        appender.doAppend(LokiLogEvent(
-            "1693232661802L",
-            "topic",
-            "local-hostname",
-            "1234",
-            "dev",
-            Level.Info,
-            "TestTag",
-            mapOf("key" to "value", "key2" to "value2"),
-            "Suppressed: kotlinx.coroutines.internal.DiagnosticCoroutineContextException: [CoroutineId(2), \"coroutine#2\":StandaloneCoroutine{Cancelling}@72ebba7b, Dispatchers.IO]",
-        ))
+        appender.doAppend(
+            LokiLogEvent(
+                "1693232661802L",
+                "topic",
+                "local-hostname",
+                "1234",
+                "dev",
+                Level.Info,
+                "TestTag",
+                mapOf("key" to "value", "key2" to "value2"),
+                "Suppressed: kotlinx.coroutines.internal.DiagnosticCoroutineContextException: [CoroutineId(2), \"coroutine#2\":StandaloneCoroutine{Cancelling}@72ebba7b, Dispatchers.IO]",
+            ),
+        )
         delay(100)
         File(targetDir).list().size shouldBe 1
 
@@ -85,4 +84,3 @@ class FileAppenderTest : FunSpec({
         File(targetDir).list().size shouldBe 0
     }
 })
-
