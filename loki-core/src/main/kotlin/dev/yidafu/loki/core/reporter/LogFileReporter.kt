@@ -9,7 +9,6 @@ import dev.yidafu.loki.core.sender.LokiSteams
 import dev.yidafu.loki.core.sender.LokiStream
 import dev.yidafu.loki.core.sender.Sender
 import kotlinx.coroutines.*
-import java.io.Closeable
 import java.nio.file.StandardWatchEventKinds.*
 
 class LogFileReporter(
@@ -18,7 +17,7 @@ class LogFileReporter(
 
     private val codec: ICodec<ILogEvent> = LogCodec,
     private val sender: Sender,
-) : Reporter, Closeable {
+) : Reporter {
 
     private lateinit var metaFile: LogMetaFile
 
@@ -62,15 +61,21 @@ class LogFileReporter(
         _started = true
         initMetaFile()
         intervalJob = CoroutineScope(Dispatchers.IO).launch {
-            while (true) {
+            while (isActive) {
                 delay(reportInterval)
                 if (!isStarted()) break
                 metaFile.getNeedReportFiles().forEach {
                     val stream = getStream(it)
                     val logs = stream.readLines()
 
+                    // 不管上报成功与否，都需要自增
                     it.pointer += logs.fold(logs.size) { acc, s -> acc + s.length }
-                    report(logs)
+
+                    try {
+                        report(logs)
+                    } catch (tr: Throwable) {
+                        println("send data to Loki failed ${tr.message}")
+                    }
                 }
                 metaFile.updateMateFile()
             }
@@ -81,6 +86,9 @@ class LogFileReporter(
         return _started
     }
 
+    /**
+     * reporter stop 时会释放文件 fd，需要调用 [onStart] 重新初始化
+     */
     override fun onStop() {
         _started = false
         intervalJob?.cancel()
@@ -92,21 +100,11 @@ class LogFileReporter(
     }
 
     /**
-     * Closes this stream and releases any system resources associated
-     * with it. If the stream is already closed then invoking this
-     * method has no effect.
-     *
-     *
-     *  As noted in [AutoCloseable.close], cases where the
-     * close may fail require careful attention. It is strongly advised
-     * to relinquish the underlying resources and to internally
-     * *mark* the `Closeable` as closed, prior to throwing
-     * the `IOException`.
-     *
-     * @throws IOException if an I/O error occurs
+     * 关闭持有的文件
      */
-    override fun close() {
+    private fun close() {
         logStreamMap.values.forEach { it.close() }
+        logStreamMap.clear()
         metaFile.close()
     }
 }

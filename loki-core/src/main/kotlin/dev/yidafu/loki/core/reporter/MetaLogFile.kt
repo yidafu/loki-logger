@@ -12,7 +12,7 @@ import java.io.RandomAccessFile
  */
 class LogMetaFile(private val logDirectory: String) : Closeable {
     private val metaFilename = "meta.json"
-
+    private val closed = false
     private val filepath
         get() = "$logDirectory/$metaFilename"
 
@@ -62,9 +62,12 @@ class LogMetaFile(private val logDirectory: String) : Closeable {
             it.isReport()
         }
     }
+
     fun updateMateFile() {
-        output.seek(0)
-        output.write(Json.encodeToString(meteFieList).toByteArray())
+        if (output.fd.valid()) {
+            output.seek(0)
+            output.write(Json.encodeToString(meteFieList).toByteArray())
+        }
     }
 
     /**
@@ -82,6 +85,8 @@ class LogMetaFile(private val logDirectory: String) : Closeable {
      * @throws [java.io.IOException] if an I/O error occurs
      */
     override fun close() {
+        if (closed) return
+
         updateMateFile()
         output.close()
     }
