@@ -53,7 +53,7 @@ private fun StringBuilder.printQuoted(value: String) {
 
 /**
  * Loki report data format
- * 
+ *
  * ```json
  * {
  *   "streams": [

@@ -5,7 +5,6 @@ import dev.yidafu.loki.core.appender.ConsoleAppender
 import dev.yidafu.loki.core.appender.FileAppender
 import dev.yidafu.loki.core.reporter.LogFileReporter
 import dev.yidafu.loki.core.sender.DefaultSender
-import dev.yidafu.loki.core.sender.HttpSender
 import org.slf4j.MDC
 import java.net.InetAddress
 
@@ -46,7 +45,7 @@ class ServerServiceProvider : BaseServiceProvider() {
                 config.logDirectory,
                 config.reportInterval,
                 sender = DefaultSender(),
-            )
+            ),
         )
     }
 }

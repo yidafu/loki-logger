@@ -16,7 +16,7 @@ class LokiLogger(
 ) : AbstractLogger(),
     AppenderAttachable<ILogEvent> by AppenderAttachableImpl() {
 
-    private var logLevel: Level = Level.Info
+    private var logLevel: Level = Level.Debug
 
     var level: Level
         get() = logLevel
@@ -36,7 +36,7 @@ class LokiLogger(
      * @since 1.4
      */
     override fun isTraceEnabled(): Boolean {
-        return logLevel >= Level.Trace
+        return logLevel <= Level.Trace
     }
 
     /**
@@ -60,7 +60,7 @@ class LokiLogger(
      * false otherwise.
      */
     override fun isDebugEnabled(): Boolean {
-        return logLevel >= Level.Debug
+        return logLevel <= Level.Debug
     }
 
     /**
@@ -82,7 +82,7 @@ class LokiLogger(
      * false otherwise.
      */
     override fun isInfoEnabled(): Boolean {
-        return logLevel >= Level.Info
+        return logLevel <= Level.Info
     }
 
     /**
@@ -104,7 +104,7 @@ class LokiLogger(
      * false otherwise.
      */
     override fun isWarnEnabled(): Boolean {
-        return logLevel >= Level.Warn
+        return logLevel <= Level.Warn
     }
 
     /**
@@ -126,7 +126,7 @@ class LokiLogger(
      * false otherwise.
      */
     override fun isErrorEnabled(): Boolean {
-        return logLevel >= Level.Error
+        return logLevel <= Level.Error
     }
 
     /**

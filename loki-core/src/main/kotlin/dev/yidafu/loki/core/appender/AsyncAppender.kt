@@ -57,7 +57,6 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
         }
     }
 
-
     /**
      * async append eventArray
      */

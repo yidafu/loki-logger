@@ -12,8 +12,8 @@ sealed class Level(
 ) {
     object Off : Level(OFF_INT, OFF_STR)
     object Trace : Level(TRACE_INT, TRACE_STR)
-    object Info : Level(INFO_INT, INFO_STR)
     object Debug : Level(DEBUG_INT, DEBUG_STR)
+    object Info : Level(INFO_INT, INFO_STR)
     object Warn : Level(WARN_INT, WARN_STR)
     object Error : Level(ERROR_INT, ERROR_STR)
     object All : Level(ALL_INT, ALL_STR)
@@ -41,11 +41,11 @@ sealed class Level(
         const val ALL_INT = Int.MAX_VALUE
 
         const val OFF_STR = "OFF"
-        const val TRACE_STR = "TRACE"
-        const val DEBUG_STR = "DEBUG"
-        const val INFO_STR = "INFO"
-        const val WARN_STR = "WARN"
-        const val ERROR_STR = "ERROR"
+        const val TRACE_STR = "trace"
+        const val DEBUG_STR = "debug"
+        const val INFO_STR = "info"
+        const val WARN_STR = "warn"
+        const val ERROR_STR = "error"
         const val ALL_STR = "ALL"
         fun from(level: String): Level {
             return when (level) {

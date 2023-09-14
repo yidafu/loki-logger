@@ -2,7 +2,6 @@ package dev.yidafu.loki.core.list
 
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
-import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class LinkedRingListTest : FunSpec({
@@ -40,7 +39,6 @@ class LinkedRingListTest : FunSpec({
         list.isEmpty() shouldBe true
     }
 
-
     test("list iterator") {
 
         val list = LinkedRingList<Int>(4)
@@ -58,9 +56,9 @@ class LinkedRingListTest : FunSpec({
     test("one item list iterate") {
         val list = LinkedRingList<Int>(12)
         list.add(1)
-        list.fold(0) { acc, i -> acc +i } shouldBe  1
+        list.fold(0) { acc, i -> acc + i } shouldBe 1
         list.remove()
         list.add(2)
-        list.fold(0) { acc, i -> acc +i } shouldBe 2
+        list.fold(0) { acc, i -> acc + i } shouldBe 2
     }
 })

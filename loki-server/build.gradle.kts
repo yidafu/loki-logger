@@ -1,5 +1,5 @@
 
-group = "dev.yidafu.loki.server"
+group = "dev.yidafu.loki"
 version = "1.0-SNAPSHOT"
 
 plugins {

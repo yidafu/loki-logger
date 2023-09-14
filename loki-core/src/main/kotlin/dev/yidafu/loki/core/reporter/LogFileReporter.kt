@@ -58,6 +58,8 @@ class LogFileReporter(
     }
 
     override fun onStart() {
+        if (isStarted()) return
+
         _started = true
         initMetaFile()
         intervalJob = CoroutineScope(Dispatchers.IO).launch {
@@ -90,6 +92,8 @@ class LogFileReporter(
      * reporter stop 时会释放文件 fd，需要调用 [onStart] 重新初始化
      */
     override fun onStop() {
+        if (!isStarted()) return
+
         _started = false
         intervalJob?.cancel()
         close()

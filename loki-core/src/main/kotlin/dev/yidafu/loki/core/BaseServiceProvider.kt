@@ -73,6 +73,5 @@ open class BaseServiceProvider : SLF4JServiceProvider {
         loggerContext = LokiLoggerContext()
         mdcAdapter = LokiMDCAdapter()
         markerFactory = BasicMarkerFactory()
-
     }
 }
