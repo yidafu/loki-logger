@@ -2,8 +2,12 @@ package dev.yidafu.loki.core.list
 
 /**
  * Linked Ring List
+ * if queue is full, queue will drop oldest item.
  */
-internal class LinkedRingList<E>(override val size: Int) : Queue<E> {
+internal class LinkedRingList<E>(
+    override val size: Int,
+    private var _length: Int = 0,
+) : Queue<E> {
     class Node<E>(
         internal var item: E?,
         internal var prev: Node<E>? = null,
@@ -53,6 +57,8 @@ internal class LinkedRingList<E>(override val size: Int) : Queue<E> {
         node.next = head
     }
 
+    val length: Int
+        get() = _length
     private fun getTail(): Node<E> {
         return tail
     }
@@ -111,6 +117,7 @@ internal class LinkedRingList<E>(override val size: Int) : Queue<E> {
      * prevents it from being added to this queue
      */
     override fun add(e: E): Boolean {
+        _length += 1
         return enqueue(e)
     }
 
@@ -132,6 +139,7 @@ internal class LinkedRingList<E>(override val size: Int) : Queue<E> {
      * prevents it from being added to this queue
      */
     override fun offer(e: E): Boolean {
+        _length += 1
         return enqueue(e)
     }
 
@@ -145,6 +153,7 @@ internal class LinkedRingList<E>(override val size: Int) : Queue<E> {
      */
     override fun remove(): E {
         if (isEmpty()) throw NoSuchElementException()
+        _length -= 1
         val first = head.next!!.item!!
         head = head.next!!
         return first
@@ -158,6 +167,7 @@ internal class LinkedRingList<E>(override val size: Int) : Queue<E> {
      */
     override fun poll(): E? {
         if (isEmpty()) return null
+        _length -= 1
         val first = head.next!!.item!!
         head = head.next!!
         return first
@@ -191,6 +201,7 @@ internal class LinkedRingList<E>(override val size: Int) : Queue<E> {
      * Removes all elements from this collection.
      */
     override fun clear() {
+        _length = 0
         var start = head.next
         while (start != null && start != tail) {
             start.item = null
@@ -239,6 +250,7 @@ internal class LinkedRingList<E>(override val size: Int) : Queue<E> {
             node.prev = tail
             tNext!!.prev = node
         }
+        _length -= 1
         return true
     }
 
