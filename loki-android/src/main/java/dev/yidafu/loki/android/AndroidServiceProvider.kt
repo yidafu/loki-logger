@@ -1,14 +1,14 @@
 package dev.yidafu.loki.android
 
 import android.os.Build
-import com.therouter.getApplicationContext
+import dev.yidafu.loki.BuildConfig
 import dev.yidafu.loki.core.BaseServiceProvider
 import dev.yidafu.loki.core.LokiLoggerContext
 import dev.yidafu.loki.core.LokiMDCAdapter
 import dev.yidafu.loki.core.appender.FileAppender
 import dev.yidafu.loki.core.config.Configuration
 import dev.yidafu.loki.core.reporter.LogFileReporter
-import dev.yidafu.loki.core.sender.DefaultSender
+import dev.yidafu.loki.core.sender.HttpSender
 import org.slf4j.MDC
 import org.slf4j.helpers.BasicMarkerFactory
 
@@ -27,11 +27,16 @@ class AndroidServiceProvider : BaseServiceProvider() {
         mdcAdapter = LokiMDCAdapter()
         markerFactory = BasicMarkerFactory()
 
+        val context = YLog.context
+        requireNotNull(context) { "You should call YLog.setContext(context) before log" }
+
         val config = Configuration(
-            httpEndpoint = "${BuildConfig.APP_SERVICE_URL}/loki/api/v1/push",
-            logDirectory = getApplicationContext()!!.filesDir.absolutePath + "/log",
-            topic = "hzsw-app",
+            httpEndpoint = context.getMetaDataString("loki_http_endpoint", "http://localhost:3000/loki/api/v1/push"),
+            logDirectory = context.filesDir.absolutePath + "/log",
+            topic = context.getAppName(),
+            reportInterval = context.getMetaDataInt("loki_report_interval", 5000).toLong(),
         )
+
         loggerContext.config = config
 
         loggerContext.root.addAppender(
@@ -44,11 +49,13 @@ class AndroidServiceProvider : BaseServiceProvider() {
                 setEventBus(loggerContext)
             },
         )
-        loggerContext.addReporter(LogFileReporter(
-            config.logDirectory,
-            config.reportInterval,
-            sender = DefaultSender()
-        ))
+        loggerContext.addReporter(
+            LogFileReporter(
+                config.logDirectory,
+                config.reportInterval,
+                sender = HttpSender(config.httpEndpoint),
+            ),
+        )
         MDC.put("topic", config.topic)
         MDC.put("hostname", "hostname")
         MDC.put("pid", Thread.currentThread().name)
@@ -61,3 +68,7 @@ class AndroidServiceProvider : BaseServiceProvider() {
         MDC.put("osRelease", Build.VERSION.RELEASE)
         MDC.put("osSdk", Build.VERSION.SDK)
     }
+
+    companion object {
+    }
+}

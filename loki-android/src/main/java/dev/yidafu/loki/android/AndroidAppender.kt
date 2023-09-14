@@ -1,13 +1,13 @@
 package dev.yidafu.loki.android
 
-import dev.yidafu.loki.core.Level
-import android.Log
+import android.util.Log
 import dev.yidafu.loki.core.ILogEvent
+import dev.yidafu.loki.core.Level
 import dev.yidafu.loki.core.appender.BaseAppender
 import dev.yidafu.loki.core.codec.ICodec
 import dev.yidafu.loki.core.codec.LogCodec
 
-fun Level.toLogInt(): Int {
+internal fun Level.toLogInt(): Int {
     return when (this) {
         is Level.Debug -> Log.INFO
         Level.All -> Log.DEBUG
@@ -21,7 +21,7 @@ fun Level.toLogInt(): Int {
 
 class AndroidAppender(
     override var name: String = "ANDROID",
-    override var encoder: ICodec<ILogEvent> = LogCodec
+    override var encoder: ICodec<ILogEvent> = LogCodec,
 ) : BaseAppender<ILogEvent>() {
     override fun doAppend(event: ILogEvent) {
         Log.println(event.level.toLogInt(), event.loggerName, event.message)

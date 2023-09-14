@@ -1,14 +1,17 @@
+group = "dev.yidafu.loki"
+version = "1.0-SNAPSHOT"
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "dev.yidafu.loki.android"
+    namespace = "dev.yidafu.loki"
     compileSdk = 33
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 21
         targetSdk = 33
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
