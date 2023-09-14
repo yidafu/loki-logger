@@ -21,6 +21,7 @@ buildscript {
     }
 }
 
-include("loki-core")
-include("loki-server")
-include("loki-android")
+include(":loki-core")
+include(":loki-server")
+include(":loki-android")
+include(":app")
