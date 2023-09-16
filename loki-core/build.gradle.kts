@@ -1,4 +1,6 @@
-group = "dev.yidafu.loki.core"
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+group = "dev.yidafu.loki"
 version = "0.0.1"
 
 plugins {
@@ -32,6 +34,13 @@ dependencies {
     testImplementation("io.kotest:kotest-assertions-core:5.7.1")
     testImplementation("io.kotest:kotest-property:5.7.1")
 }
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()

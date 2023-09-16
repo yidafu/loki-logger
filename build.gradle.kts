@@ -27,10 +27,11 @@ subprojects {
 //    apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
     apply(plugin = "org.jetbrains.dokka")
+    apply(plugin = "org.jetbrains.kotlinx.kover")
+
 //    tasks.withType<KotlinCompile> {
 //        kotlinOptions.jvmTarget = "1.8"
 //    }
-
 
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
         version.set("0.50.0")

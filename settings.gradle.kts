@@ -18,6 +18,7 @@ buildscript {
         classpath("org.jetbrains.kotlin:kotlin-serialization:1.9.0")
         // https://mvnrepository.com/artifact/com.android.tools.build/gradle
         classpath("com.android.tools.build:gradle:7.4.1")
+        classpath("org.jetbrains.kotlinx:kover-gradle-plugin:0.7.3")
     }
 }
 
