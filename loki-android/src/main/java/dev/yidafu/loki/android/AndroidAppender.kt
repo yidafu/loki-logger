@@ -24,6 +24,6 @@ class AndroidAppender(
     override var encoder: ICodec<ILogEvent> = LogCodec,
 ) : BaseAppender<ILogEvent>() {
     override fun doAppend(event: ILogEvent) {
-        Log.println(event.level.toLogInt(), event.loggerName, event.message)
+        Log.println(event.level.toLogInt(), event.tag, event.message)
     }
 }

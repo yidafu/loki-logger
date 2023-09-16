@@ -4,17 +4,15 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
 
-
 fun Context.getAppName(): String {
     return applicationInfo.loadLabel(packageManager).toString()
 }
-
 
 fun Context.getMetaDataString(name: String, defaultValue: String): String {
     try {
         val ai = packageManager.getApplicationInfo(
             packageName,
-            PackageManager.GET_META_DATA
+            PackageManager.GET_META_DATA,
         )
         val bundle = ai.metaData
         return bundle.getString(name) ?: defaultValue
@@ -28,7 +26,7 @@ fun Context.getMetaDataInt(name: String, defaultValue: Int): Int {
     try {
         val ai = packageManager.getApplicationInfo(
             packageName,
-            PackageManager.GET_META_DATA
+            PackageManager.GET_META_DATA,
         )
         val bundle = ai.metaData
         return bundle.getInt(name) ?: defaultValue

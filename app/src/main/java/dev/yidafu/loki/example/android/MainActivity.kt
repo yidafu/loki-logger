@@ -1,7 +1,6 @@
 package dev.yidafu.loki.example.android
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -19,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import dev.yidafu.loki.core.LokiLoggerContext
 import dev.yidafu.loki.example.android.ui.theme.Example_androidTheme
 import org.slf4j.LoggerFactory
-import kotlin.time.measureTime
 
 class MainActivity : ComponentActivity() {
     private val logger = LoggerFactory.getLogger("MainActivity")
@@ -37,9 +35,9 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Column {
                         Button(onClick = {
-                                repeat(10) {
-                                    logger.warn("repeat message")
-                                }
+                            repeat(10) {
+                                logger.warn("repeat message")
+                            }
                         }) {
                             Text("Repeat Msg")
                         }
