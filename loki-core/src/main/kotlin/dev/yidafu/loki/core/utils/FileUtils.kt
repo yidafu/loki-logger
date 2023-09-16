@@ -14,8 +14,6 @@ object FileUtils {
         } catch (e: UnsupportedOperationException) {
             // getting an inode is unsupported for this JVM or that filesystem
             return file.absoluteFile.hashCode().toLong()
-        } catch (e: IllegalArgumentException) {
-            return file.absoluteFile.hashCode().toLong()
         }
     }
 }

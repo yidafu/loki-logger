@@ -32,7 +32,7 @@ data class LogMeta(
     @Transient
     val logFile: File = File(filepath),
 ) {
-    fun isReport(): Boolean {
+    fun isReportable(): Boolean {
         return logFile.isFile && pointer < logFile.length()
     }
 }

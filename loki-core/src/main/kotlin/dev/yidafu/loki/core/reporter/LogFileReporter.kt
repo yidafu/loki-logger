@@ -4,7 +4,6 @@ import dev.yidafu.loki.core.ILogEvent
 import dev.yidafu.loki.core.LokiLogEvent
 import dev.yidafu.loki.core.codec.ICodec
 import dev.yidafu.loki.core.codec.LogCodec
-import dev.yidafu.loki.core.listener.EventBus
 import dev.yidafu.loki.core.sender.LokiSteams
 import dev.yidafu.loki.core.sender.LokiStream
 import dev.yidafu.loki.core.sender.Sender
@@ -13,17 +12,12 @@ import java.nio.file.StandardWatchEventKinds.*
 
 class LogFileReporter(
     private val logDirectory: String,
-    private val reportInterval: Long,
-
+    reportInterval: Long,
     private val codec: ICodec<ILogEvent> = LogCodec,
     private val sender: Sender,
-) : Reporter {
+) : IntervalReporter(reportInterval) {
 
     private lateinit var metaFile: LogMetaFile
-
-    private var _started = false
-
-    private var intervalJob: Job? = null
 
     private val logStreamMap = mutableMapOf<String, LogFileInputStream>()
 
@@ -57,50 +51,33 @@ class LogFileReporter(
         metaFile = LogMetaFile(logDirectory)
     }
 
+    override fun report() {
+        metaFile.getNeedReportFiles().forEach {
+            val stream = getStream(it)
+            val logs = stream.readLines()
+
+            // 不管上报成功与否，都需要自增
+            it.pointer += logs.fold(logs.size) { acc, s -> acc + s.length }
+
+            try {
+                report(logs)
+            } catch (tr: Throwable) {
+                println("send data to Loki failed ${tr.message}")
+            }
+        }
+        metaFile.updateMateFile()
+    }
+
     override fun onStart() {
         if (isStarted()) return
 
-        _started = true
         initMetaFile()
-        intervalJob = CoroutineScope(Dispatchers.IO).launch {
-            while (isActive) {
-                delay(reportInterval)
-                if (!isStarted()) break
-                metaFile.getNeedReportFiles().forEach {
-                    val stream = getStream(it)
-                    val logs = stream.readLines()
-
-                    // 不管上报成功与否，都需要自增
-                    it.pointer += logs.fold(logs.size) { acc, s -> acc + s.length }
-
-                    try {
-                        report(logs)
-                    } catch (tr: Throwable) {
-                        println("send data to Loki failed ${tr.message}")
-                    }
-                }
-                metaFile.updateMateFile()
-            }
-        }
+        super.onStart()
     }
 
-    override fun isStarted(): Boolean {
-        return _started
-    }
-
-    /**
-     * reporter stop 时会释放文件 fd，需要调用 [onStart] 重新初始化
-     */
     override fun onStop() {
-        if (!isStarted()) return
-
-        _started = false
-        intervalJob?.cancel()
+        super.onStop()
         close()
-    }
-
-    override fun setEventBus(bus: EventBus) {
-        bus.addListener(this)
     }
 
     /**

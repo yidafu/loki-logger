@@ -11,7 +11,7 @@ class ConsoleAppender(override var name: String) : SyncAppender<ILogEvent>() {
     private val outputStream: PrintStream = System.out
 
     override fun writeOut(bytes: ByteArray) {
-        outputStream.writeBytes(bytes)
+        outputStream.write(bytes)
         outputStream.write('\n'.code)
         outputStream.flush()
     }

@@ -64,7 +64,7 @@ internal class LogMetaFile(private val logDirectory: String) : Closeable {
      */
     fun getNeedReportFiles(): List<LogMeta> {
         return meteFieList.filter {
-            it.isReport()
+            it.isReportable()
         }
     }
 

@@ -48,5 +48,4 @@ interface ILogEvent {
      * message content
      */
     abstract val message: String
-
 }

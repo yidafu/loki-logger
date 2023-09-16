@@ -40,13 +40,13 @@ sealed class Level(
         const val ERROR_INT = EventConstants.ERROR_INT
         const val ALL_INT = Int.MAX_VALUE
 
-        const val OFF_STR = "OFF"
+        const val OFF_STR = "off"
         const val TRACE_STR = "trace"
         const val DEBUG_STR = "debug"
         const val INFO_STR = "info"
         const val WARN_STR = "warn"
         const val ERROR_STR = "error"
-        const val ALL_STR = "ALL"
+        const val ALL_STR = "all"
         fun from(level: String): Level {
             return when (level) {
                 OFF_STR -> Off

@@ -54,14 +54,14 @@ class LokiLogEvent(
 
     override fun equals(other: Any?): Boolean {
         if (other is LokiLogEvent) {
-            return timestamp == other.timestamp ||
-                topic == other.topic ||
-                hostname == other.hostname ||
-                pid == other.pid ||
-                env == other.env ||
-                level == other.level ||
-                tag == other.tag ||
-                message == other.message ||
+            return timestamp == other.timestamp &&
+                topic == other.topic &&
+                hostname == other.hostname &&
+                pid == other.pid &&
+                env == other.env &&
+                level == other.level &&
+                tag == other.tag &&
+                message == other.message &&
                 tagMap == other.tagMap
         }
         return false

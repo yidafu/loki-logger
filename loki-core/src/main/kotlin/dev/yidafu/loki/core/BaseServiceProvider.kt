@@ -58,7 +58,7 @@ open class BaseServiceProvider : SLF4JServiceProvider {
     }
 
     protected fun initializeLoggerContext() {
-        Configurator(loggerContext).autoConfig()
+        loggerContext.config = Configurator().autoConfig()
     }
 
     /**
