@@ -20,6 +20,7 @@ class ServerServiceProvider : BaseServiceProvider() {
      */
     override fun initialize() {
         super.initialize()
+        initializeLoggerContext()
 
         loggerContext.root.addAppender(
             ConsoleAppender("CONSOLE").apply {

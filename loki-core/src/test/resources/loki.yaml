@@ -1,0 +1,4 @@
+topic: "test-app"
+log-dir: "/test/log/loki"
+http-endpoint: "http://test.com/loki/api/v1/push"
+report-interval: 1000

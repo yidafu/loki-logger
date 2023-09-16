@@ -23,6 +23,10 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
+    testImplementation("io.kotest:kotest-extensions-mockserver:4.4.3")
+    // https://mvnrepository.com/artifact/io.mockk/mockk
+    testImplementation("io.mockk:mockk:1.13.7")
+
     implementation("org.slf4j:slf4j-api:2.0.7")
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
 //    implementation("ch.qos.logback:logback-classic:1.4.11")
@@ -40,7 +44,6 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "11"
     }
 }
-
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()

@@ -4,7 +4,6 @@ import dev.yidafu.loki.core.Level
 import dev.yidafu.loki.core.LokiLogEvent
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.maps.shouldBeEmpty
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldBeEmpty
 import kotlin.test.assertEquals
