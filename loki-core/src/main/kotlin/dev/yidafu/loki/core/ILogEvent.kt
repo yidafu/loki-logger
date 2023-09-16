@@ -37,7 +37,7 @@ interface ILogEvent {
     /**
      * logger tag name
      */
-    abstract val loggerName: String
+    abstract val tag: String
 
     /**
      * other tags
@@ -48,4 +48,5 @@ interface ILogEvent {
      * message content
      */
     abstract val message: String
+
 }

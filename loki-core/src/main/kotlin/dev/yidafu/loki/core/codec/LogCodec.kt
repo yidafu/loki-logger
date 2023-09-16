@@ -26,7 +26,7 @@ object LogCodec : ICodec<ILogEvent> {
             append("> ")
             append(event.level.toString())
             append(" (")
-            append(event.loggerName)
+            append(event.tag)
             append(") ")
             event.tagMap.forEach { (key, value) ->
                 append("[$key:$value] ")
@@ -45,40 +45,77 @@ object LogCodec : ICodec<ILogEvent> {
      * ````
      */
     override fun decode(raw: String): ILogEvent {
-        try {
-            val firstWhitespace = raw.indexOf(WHITESPACE)
-            val timestamp = raw.slice(0..<firstWhitespace)
-
-            val topicIndex = raw.indexOf(WHITESPACE, firstWhitespace + 1)
-            val topic = raw.slice((firstWhitespace + 2)..<(topicIndex - 1))
-
-            val hostnameIndex = raw.indexOf(WHITESPACE, topicIndex + 1)
-            val hostname = raw.slice((topicIndex + 2)..<(hostnameIndex - 1))
-
-            val pidIndex = raw.indexOf(WHITESPACE, hostnameIndex + 1)
-            val pid = raw.slice((hostnameIndex + 2)..<(pidIndex - 1))
-
-            val envIndex = raw.indexOf(WHITESPACE, pidIndex + 1)
-            val env = raw.slice((pidIndex + 2)..<(envIndex - 1))
-
-            val levelIndex = raw.indexOf(WHITESPACE, envIndex + 1)
-            val level = raw.slice((envIndex + 1)..<levelIndex)
-
-            val loggerIndex = raw.indexOf(WHITESPACE, levelIndex + 1)
-            val loggerName = raw.slice((levelIndex + 2)..<(loggerIndex - 1))
-
-            var leftIndex: Int = loggerIndex
-            val tagMap = mutableMapOf<String, String>()
-            while (raw[leftIndex + 1] == '[') {
-                val rightIndex = raw.indexOf(']', leftIndex)
-                val pair = raw.slice((leftIndex + 2)..<rightIndex)
-                val (key, value) = pair.split(':')
-                tagMap[key] = value
-                leftIndex = rightIndex + 1
+        val firstWhitespace = raw.indexOf(WHITESPACE)
+            val timestamp =  if (firstWhitespace > -1) {
+                raw.slice(0..<firstWhitespace)
+            } else {
+                // 上报时过滤掉
+                ""
             }
-            val msgLeftIndex = leftIndex.coerceAtLeast(loggerIndex) + 1
+            var index = firstWhitespace
+
+            val topicIndex = raw.indexOf(WHITESPACE, index + 1)
+            val topic = if (topicIndex > -1) {
+                val s = raw.slice((index + 2)..<(topicIndex - 1))
+                index = topicIndex
+                s
+            } else "Unknown"
+
+
+            val hostnameIndex = raw.indexOf(WHITESPACE, index + 1)
+            val hostname = if (hostnameIndex > -1) {
+                val s = raw.slice((index + 2)..<(hostnameIndex - 1))
+                index = hostnameIndex
+                s
+            } else "-"
+
+            val pidIndex = raw.indexOf(WHITESPACE, index + 1)
+            val pid = if (pidIndex > -1) {
+                val s = raw.slice((index + 2)..<(pidIndex - 1))
+                index = pidIndex
+                s
+            } else "-1"
+
+            val envIndex = raw.indexOf(WHITESPACE, index + 1)
+            val env = if (envIndex > -1) {
+                val s = raw.slice((index + 2)..<(envIndex - 1))
+                index = envIndex
+                s
+            } else "-"
+
+            val levelIndex = raw.indexOf(WHITESPACE, index + 1)
+            val level = if (levelIndex > -1) {
+                val s = raw.slice((index + 1)..<levelIndex)
+                index = levelIndex
+                s
+            } else Level.INFO_STR
+
+            val tagIndex = raw.indexOf(WHITESPACE, index + 1)
+            val tag = if (tagIndex > -1) {
+                val s = raw.slice((index + 2)..<(tagIndex - 1))
+                index = tagIndex
+                s
+            } else "Unknown"
+
+            val tagMap = mutableMapOf<String, String>()
+            while (index + 1 < raw.length && raw[index + 1] == '[') {
+                val rightIndex = raw.indexOf(']', index)
+                if (rightIndex > -1) {
+                    val pair = raw.slice((index + 2)..<rightIndex)
+                    val (key, value) = pair.split(':')
+                    tagMap[key] = value
+                    index = rightIndex + 1
+                } else {
+                    break
+                }
+            }
+            val msgLeftIndex = index + 1
             val msgIndex = raw.indexOf('-', msgLeftIndex)
-            val msg = raw.slice((msgIndex + 2)..<raw.length).replace("\\n", "\n")
+            val msg = if (msgIndex > -1)
+                raw.slice((msgIndex + 2)..<raw.length).replace("\\n", "\n")
+            else
+                ""
+
             return LokiLogEvent(
                 timestamp,
                 topic,
@@ -86,16 +123,10 @@ object LogCodec : ICodec<ILogEvent> {
                 pid,
                 env,
                 Level.from(level),
-                loggerName,
+                tag,
                 tagMap,
                 msg,
             )
-        } catch (e: Throwable) {
-            println()
-            println(raw)
-            println()
-            throw e
-        }
     }
 
     private const val WHITESPACE = ' '

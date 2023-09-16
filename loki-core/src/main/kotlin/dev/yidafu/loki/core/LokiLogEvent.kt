@@ -12,11 +12,14 @@ class LokiLogEvent(
     override val pid: String,
     override val env: String,
     override val level: Level,
-    override val loggerName: String,
+    override val tag: String,
     override val tagMap: Map<String, String>,
     override val message: String,
 ) : ILogEvent {
 
+    /**
+     * unique key of LogEvent
+     */
     val uniqueKey by lazy {
         StringBuilder().apply {
             append(topic)
@@ -29,7 +32,7 @@ class LokiLogEvent(
             append(',')
             append(level)
             append(',')
-            append(loggerName)
+            append(tag)
             append(',')
             append(tagMap.values.joinToString(","))
         }.toString()
@@ -45,9 +48,10 @@ class LokiLogEvent(
             "pid" to pid,
             "env" to env,
             "level" to level.toString(),
-            "name" to loggerName,
+            "tag" to tag,
         ) + tagMap
     }
+
     override fun equals(other: Any?): Boolean {
         if (other is LokiLogEvent) {
             return timestamp == other.timestamp ||
@@ -56,7 +60,7 @@ class LokiLogEvent(
                 pid == other.pid ||
                 env == other.env ||
                 level == other.level ||
-                loggerName == other.loggerName ||
+                tag == other.tag ||
                 message == other.message ||
                 tagMap == other.tagMap
         }
@@ -70,7 +74,7 @@ class LokiLogEvent(
         result = 31 * result + pid.hashCode()
         result = 31 * result + env.hashCode()
         result = 31 * result + level.hashCode()
-        result = 31 * result + loggerName.hashCode()
+        result = 31 * result + tag.hashCode()
         result = 31 * result + message.hashCode()
         result = 31 * result + tagMap.hashCode()
 
