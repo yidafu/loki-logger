@@ -1,4 +1,4 @@
-image: gradle:jdk17
+image: gradle:7.6.1-jdk17
 
 stages:
   - test
@@ -8,7 +8,8 @@ stages:
 gradle_test:
   stage: test
   script:
-    - gradle test
+    - gradle :loki-core:test
+    - gradle :loki-core:test
 
 ktlint:
   stage: lint
@@ -18,4 +19,5 @@ ktlint:
 gradle_build:
   stage: build
   script:
-    - gradle build
+    - gradle :loki-core:build
+    - gradle :loki-core:server
