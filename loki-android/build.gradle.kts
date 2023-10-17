@@ -30,11 +30,19 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
         jvmTarget = "1.8"
+    }
+
+    publishing {
+        singleVariant("release") {
+            // if you don't want sources/javadoc, remove these lines
+            withSourcesJar()
+//            withJavadocJar()
+        }
     }
 }
 
@@ -62,29 +70,13 @@ publishing {
 
             pom {
                 artifactId = "loki-android"
-//                from(components["release"])
-//                artifact(tasks.kotlinSourcesJar)
-//                artifact(dokkaJavadocJar)
 
-                versionMapping {
-                    usage("java-api") {
-                        fromResolutionOf("runtimeClasspath")
-                    }
-                    usage("java-runtime") {
-                        fromResolutionResult()
-                    }
-                }
 
                 name.set("Loki Logger")
                 description.set("A Loki Android Client")
                 url.set("https://github.com/yidafu/loki-logger")
-//                properties.set(mapOf(
-//                    "myProp" to "value",
-//                    "prop.with.dots" to "anotherValue"
-//                ))
                 distributionManagement {
                     relocation {
-                        // New artifact coordinates
                         groupId.set("dev.yidafu.loki")
                         artifactId.set("android")
                         version.set("0.0.1")
@@ -116,10 +108,6 @@ publishing {
 
     repositories {
         maven {
-            name = "local"
-            url = uri("${project.buildDir}/repo")
-        }
-        maven {
             url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
             // 这里就是之前在issues.sonatype.org注册的账号
             credentials {
@@ -132,4 +120,11 @@ publishing {
 
 signing {
     sign(publishing.publications["mavenKotlin"])
+}
+
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
