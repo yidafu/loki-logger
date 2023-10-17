@@ -1,6 +1,8 @@
 package dev.yidafu.loki.core
 
 import org.slf4j.MDC
+import java.time.Clock
+
 
 /**
  * ILogEvent Implement
@@ -82,11 +84,21 @@ class LokiLogEvent(
     }
 
     companion object {
+
+        private fun getNanosecond(): Long {
+            val clock = Clock.systemDefaultZone()
+            val instant = clock.instant() // or Instant.now();
+
+            val seconds = instant.epochSecond
+            val nano = instant.nano.toLong()
+            return seconds * 1_000_000_000 + nano
+        }
+
         /**
          * create LokiLogEvent
          */
         fun create(level: Level, loggerName: String, message: String): LokiLogEvent {
-            val timestamp = System.currentTimeMillis()
+            val timestamp = getNanosecond()
             val map = MDC.getCopyOfContextMap()
             val topic = map[Constants.TAG_TOPIC] ?: "-"
             val hostname = map[Constants.TAG_HOSTNAME] ?: "-"
