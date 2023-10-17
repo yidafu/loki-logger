@@ -4,25 +4,25 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
 
-fun Context.getAppName(): String {
+internal fun Context.getAppName(): String {
     return applicationInfo.loadLabel(packageManager).toString()
 }
 
-fun Context.getMetaDataString(name: String, defaultValue: String): String {
+internal fun Context.getMetaDataString(name: String, defaultValue: String): String {
     try {
-        val ai = packageManager.getApplicationInfo(
+        val appInfo = packageManager.getApplicationInfo(
             packageName,
             PackageManager.GET_META_DATA,
         )
-        val bundle = ai.metaData
+        val bundle = appInfo.metaData
         return bundle.getString(name) ?: defaultValue
     } catch (e: PackageManager.NameNotFoundException) {
-        Log.w("LokiAndroid", "Unable to load meta-data: " + e.message)
+        Log.w("LokiAndroid", "Unable to load meta-data '$name' " + e.message)
     }
     return defaultValue
 }
 
-fun Context.getMetaDataInt(name: String, defaultValue: Int): Int {
+internal fun Context.getMetaDataInt(name: String, defaultValue: Int): Int {
     try {
         val ai = packageManager.getApplicationInfo(
             packageName,

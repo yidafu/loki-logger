@@ -28,7 +28,7 @@ class AndroidServiceProvider : BaseServiceProvider() {
         markerFactory = BasicMarkerFactory()
 
         val context = YLog.context
-        requireNotNull(context) { "You should call YLog.setContext(context) before log" }
+        requireNotNull(context) { "You should call YLog.setContext(context) before logging" }
 
         val config = Configuration(
             httpEndpoint = context.getMetaDataString("loki_http_endpoint", "http://localhost:3000/loki/api/v1/push"),
@@ -59,14 +59,13 @@ class AndroidServiceProvider : BaseServiceProvider() {
         MDC.put("topic", config.topic)
         MDC.put("hostname", "hostname")
         MDC.put("pid", Thread.currentThread().name)
-        val env = if (BuildConfig.DEBUG) "dev" else "prod"
-        MDC.put("env", env)
+        MDC.put("env", if (BuildConfig.DEBUG) "debug" else "release")
         MDC.put("brand", Build.BRAND)
         MDC.put("model", Build.MODEL)
         MDC.put("product", Build.PRODUCT)
         MDC.put("fingerprint", Build.FINGERPRINT)
         MDC.put("osRelease", Build.VERSION.RELEASE)
-        MDC.put("osSdk", Build.VERSION.SDK)
+        MDC.put("osSdk", Build.VERSION.SDK_INT.toString())
     }
 
     companion object {
