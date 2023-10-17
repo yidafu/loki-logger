@@ -20,7 +20,6 @@ class LazyCleanerTest : FunSpec({
             delay(1500)
             cleaner.clean()
             File(dir).list().size shouldBe 1
-
         }
     }
 })

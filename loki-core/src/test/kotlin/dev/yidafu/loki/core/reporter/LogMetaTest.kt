@@ -4,7 +4,7 @@ import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.booleans.shouldBeTrue
 import java.io.File
 
-class LogMetaTest : FunSpec ({
+class LogMetaTest : FunSpec({
     test("LogMeta") {
         File("/tmp/log-met-test").mkdirs()
         val logMeta = LogMeta("/tmp/log-met-test/meta.log", 0, 0)

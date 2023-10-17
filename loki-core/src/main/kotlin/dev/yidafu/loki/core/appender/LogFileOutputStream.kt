@@ -9,6 +9,7 @@ import java.nio.channels.FileLock
 class LogFileOutputStream(private val file: File) : OutputStream() {
 //    private val outputStream: BufferedOutputStream
     private val fileOutputStream: FileOutputStream
+
 //    private val BUFFER_SIZE: Int = 8 * 1024
     init {
         if (!file.parentFile.exists()) {

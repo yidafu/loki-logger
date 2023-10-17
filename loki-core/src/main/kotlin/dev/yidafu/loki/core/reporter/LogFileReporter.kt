@@ -7,8 +7,6 @@ import dev.yidafu.loki.core.codec.LogCodec
 import dev.yidafu.loki.core.sender.LokiSteams
 import dev.yidafu.loki.core.sender.LokiStream
 import dev.yidafu.loki.core.sender.Sender
-import kotlinx.coroutines.*
-import java.nio.file.StandardWatchEventKinds.*
 
 class LogFileReporter(
     private val logDirectory: String,
@@ -39,7 +37,7 @@ class LogFileReporter(
             .values.map {
                 val tagMap = it[0].getMap()
                 val values = it.map { event ->
-                    arrayOf(event.timestamp.toString(), event.message)
+                    arrayOf(event.timestamp, event.message)
                 }.toTypedArray()
                 LokiStream(tagMap, values)
             }.toTypedArray()

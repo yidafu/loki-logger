@@ -19,7 +19,6 @@ class FixedSurvivalTimeCleanerTest : FunSpec({
             delay(1500)
             cleaner.clean()
             File("/tmp/log/cleaner-test").list().size shouldBe 0
-
         }
     }
 })

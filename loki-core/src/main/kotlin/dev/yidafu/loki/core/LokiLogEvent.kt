@@ -3,7 +3,6 @@ package dev.yidafu.loki.core
 import org.slf4j.MDC
 import java.time.Clock
 
-
 /**
  * ILogEvent Implement
  */

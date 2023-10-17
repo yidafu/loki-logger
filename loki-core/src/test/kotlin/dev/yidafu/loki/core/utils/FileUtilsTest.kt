@@ -1,6 +1,5 @@
 package dev.yidafu.loki.core.utils
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.longs.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
@@ -17,8 +16,8 @@ class FileUtilsTest : FunSpec({
     test("FileUtils#getINode") {
         File("/tmp/loki-logger/file-utils").mkdirs()
         val f = File("/tmp/loki-logger/file-utils/inode.txt")
-            f.writeText("x")
-        FileUtils.getINode(f) shouldBeGreaterThan  0
+        f.writeText("x")
+        FileUtils.getINode(f) shouldBeGreaterThan 0
     }
 
     test("get inode throw UnsupportedOperationException") {
@@ -28,6 +27,6 @@ class FileUtilsTest : FunSpec({
         }
         val f = File("/tmp/loki-logger/file-utils/inode.txt")
         f.writeText("x")
-        FileUtils.getINode(f) shouldBe  f.absoluteFile.hashCode()
+        FileUtils.getINode(f) shouldBe f.absoluteFile.hashCode()
     }
 })
