@@ -1,6 +1,7 @@
 package dev.yidafu.loki.example.android
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import dev.yidafu.loki.core.LokiLoggerContext
 import dev.yidafu.loki.example.android.ui.theme.Example_androidTheme
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.slf4j.LoggerFactory
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +28,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val context = LoggerFactory.getILoggerFactory() as LokiLoggerContext
+        val loggerContext = LoggerFactory.getILoggerFactory() as LokiLoggerContext
 
         setContent {
             Example_androidTheme {
@@ -33,18 +37,23 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
+                    Log.i("Main", "Render")
                     Column {
                         Button(onClick = {
-                            repeat(10) {
-                                logger.warn("repeat message")
+                            GlobalScope.launch {
+                                repeat(10) {
+                                    delay(10)
+                                    logger.warn("repeat message")
+                                }
                             }
                         }) {
-                            Text("Repeat Msg")
+                            Text("Repeat Msg X 10")
                         }
                         Spacer(Modifier.height(20.dp))
 
                         Button(onClick = {
-                            context.startReporters()
+                            Log.i("Main", "开始上报")
+                            loggerContext.startReporters()
                         }) {
                             Text("开始上报")
                         }
@@ -52,7 +61,7 @@ class MainActivity : ComponentActivity() {
                         Spacer(Modifier.height(20.dp))
 
                         Button(onClick = {
-                            context.stopReporters()
+                            loggerContext.stopReporters()
                         }) {
                             Text("停止上报")
                         }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
+     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".ExampleApplication"
         android:allowBackup="true"
@@ -12,8 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Example_android"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <meta-data android:name="loki_http_endpoint" android:value="http://127.0.0.:5000/loki/api/v1/push" />
+        <meta-data android:name="loki_http_endpoint" android:value="http://172.16.73.192:8201/loki/api/v1/push" />
         <meta-data android:name="loki_report_interval" android:value="2000" />
         <activity
             android:name=".MainActivity"
