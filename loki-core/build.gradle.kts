@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "dev.yidafu.loki"
-version = "0.0.1"
+version = "0.0.3"
 
 plugins {
     kotlin("jvm")
@@ -29,7 +29,7 @@ dependencies {
 
     implementation("org.slf4j:slf4j-api:2.0.7")
     // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
-//    implementation("ch.qos.logback:logback-classic:1.4.11")
+    // implementation("ch.qos.logback:logback-classic:1.4.11")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
     implementation("com.charleskorn.kaml:kaml:0.55.0")
@@ -41,7 +41,7 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
@@ -85,7 +85,7 @@ publishing {
                         // New artifact coordinates
                         groupId.set("dev.yidafu.loki")
                         artifactId.set("lib")
-                        version.set("0.0.1")
+                        version.set("0.0.3")
                         message.set("groupId has been changed")
                     }
                 }
@@ -149,6 +149,8 @@ tasks.register<Jar>("generateSourceJar") {
     from(sourceSets["main"].kotlin.srcDirs)
     archiveClassifier.set("sources")
 }
+
+tasks.named("signMavenKotlinPublication").configure { dependsOn("generateSourceJar") }
 
 afterEvaluate {
     val jarTask = tasks.findByName("jar")
