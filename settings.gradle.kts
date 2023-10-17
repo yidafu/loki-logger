@@ -1,5 +1,3 @@
-include(":loki-android2")
-
 rootProject.name = "loki-logger"
 
 buildscript {
