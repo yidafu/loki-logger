@@ -25,4 +25,19 @@ class LogFileInputStreamTest : FunSpec({
         stream.readLines() shouldContainInOrder listOf("#first line", "second line")
         stream.close()
     }
+
+    test("read chinese context") {
+        val dirPath = "/tmp/loki-logger/input-stream"
+        val dir = File(dirPath)
+        dir.mkdirs()
+        File("$dirPath/test-cn.log").delete()
+        val log = File("$dirPath/test-cn.log")
+        log.writeText("#第一行中文")
+        val stream = LogFileInputStream(log, 0)
+        log.appendText("第一行中文")
+        stream.readLines().shouldBeEmpty()
+        log.appendText("\n第二行中文\n")
+        stream.readLines() shouldContainInOrder listOf("#第一行中文", "第二行中文")
+        stream.close()
+    }
 })
