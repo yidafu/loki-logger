@@ -29,12 +29,14 @@ class AndroidServiceProvider : BaseServiceProvider() {
 
         val context = YLog.context
         requireNotNull(context) { "You should call YLog.setContext(context) before logging" }
+        val yConfig = YLog.yConfig
 
         val config = Configuration(
-            httpEndpoint = context.getMetaDataString("loki_http_endpoint", "http://localhost:3000/loki/api/v1/push"),
+            httpEndpoint = context.getMetaDataString("loki_http_endpoint", yConfig.httpEndpoint),
             logDirectory = context.filesDir.absolutePath + "/log",
-            topic = context.getAppName(),
-            reportInterval = context.getMetaDataInt("loki_report_interval", 5000).toLong(),
+            topic = context.getMetaDataString("loki_topic", if (yConfig.topic == "unknown") context.getAppName() else yConfig.topic),
+            reportInterval = context.getMetaDataLong("loki_report_interval", yConfig.reportInterval),
+            maxSurvivalTime = context.getMetaDataLong("loki_log_file_max_survival_time", yConfig.maxSurvivalTime)
         )
 
         loggerContext.config = config
@@ -45,7 +47,11 @@ class AndroidServiceProvider : BaseServiceProvider() {
             },
         )
         loggerContext.root.addAppender(
-            FileAppender(config.logDirectory, config.namingStrategy).apply {
+            FileAppender(
+                config.logDirectory,
+                config.namingStrategy,
+                config.maxSurvivalTime,
+            ).apply {
                 setEventBus(loggerContext)
             },
         )
@@ -66,8 +72,5 @@ class AndroidServiceProvider : BaseServiceProvider() {
         MDC.put("fingerprint", Build.FINGERPRINT)
         MDC.put("osRelease", Build.VERSION.RELEASE)
         MDC.put("osSdk", Build.VERSION.SDK_INT.toString())
-    }
-
-    companion object {
     }
 }

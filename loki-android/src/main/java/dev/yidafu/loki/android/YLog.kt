@@ -3,6 +3,7 @@ package dev.yidafu.loki.android
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
+import dev.yidafu.loki.core.config.Configuration
 import org.slf4j.LoggerFactory
 
 @SuppressLint("StaticFieldLeak")
@@ -11,6 +12,11 @@ object YLog {
 
     fun setContext(ctx: Context) {
         context = ctx
+    }
+
+    internal var yConfig = Configuration()
+    fun setConfig(config: Configuration) {
+        yConfig = config
     }
 
     fun v(tag: String, msg: String): Int {
@@ -92,7 +98,7 @@ object YLog {
         )
     }
 
-    private fun println(priority: Int, tag: String, msg: String): Int {
+    fun println(priority: Int, tag: String, msg: String): Int {
         LoggerFactory.getLogger(tag).atLevel(fromLogInt(priority)).log(msg)
         return 0
     }

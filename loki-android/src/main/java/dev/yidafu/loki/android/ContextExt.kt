@@ -35,3 +35,17 @@ internal fun Context.getMetaDataInt(name: String, defaultValue: Int): Int {
     }
     return defaultValue
 }
+
+internal fun Context.getMetaDataLong(name: String, defaultValue: Long): Long {
+    try {
+        val ai = packageManager.getApplicationInfo(
+            packageName,
+            PackageManager.GET_META_DATA,
+        )
+        val bundle = ai.metaData
+        return bundle.getLong(name, defaultValue)
+    } catch (e: PackageManager.NameNotFoundException) {
+        Log.w("LokiAndroid", "Unable to load meta-data: " + e.message)
+    }
+    return defaultValue
+}

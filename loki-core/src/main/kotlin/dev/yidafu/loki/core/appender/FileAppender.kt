@@ -7,7 +7,7 @@ import dev.yidafu.loki.core.appender.naming.NamingStrategyFactory
 import dev.yidafu.loki.core.codec.ICodec
 import dev.yidafu.loki.core.codec.LogCodec
 import java.io.File
-import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
 
@@ -17,7 +17,7 @@ import kotlin.time.DurationUnit
 class FileAppender(
     private val logDir: String,
     namingStrategyName: String,
-    maxSurvivalTime: Long = TimeUnit.DAYS.toDays(7),
+    maxSurvivalTime: Long = 7.days.inWholeMilliseconds,
     cleanerCheckInterval: Long = 5.minutes.toLong(DurationUnit.MILLISECONDS),
     override var name: String = "FILE",
     override var encoder: ICodec<ILogEvent> = LogCodec,

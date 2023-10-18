@@ -2,6 +2,7 @@ package dev.yidafu.loki.core.config
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration.Companion.days
 
 @Serializable
 data class Configuration(
@@ -19,4 +20,7 @@ data class Configuration(
 
     @SerialName("report-interval")
     val reportInterval: Long = 5 * 1000,
+
+    @SerialName("max-survival-time")
+    val maxSurvivalTime: Long = 7.days.inWholeMilliseconds
 )
