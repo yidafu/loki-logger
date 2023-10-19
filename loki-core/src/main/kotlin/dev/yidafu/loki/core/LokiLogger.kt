@@ -13,11 +13,10 @@ class LokiLogger(
     private val _name: String,
     private val parent: LokiLogger? = null,
     private val children: MutableList<LokiLogger> = mutableListOf(),
+    private var logLevel: Level = Level.Info,
 ) : AbstractLogger(),
-    AppenderAttachable<ILogEvent> by AppenderAttachableImpl() {
-
-    private var logLevel: Level = Level.Debug
-
+    AppenderAttachable<ILogEvent> by AppenderAttachableImpl()
+{
     var level: Level
         get() = logLevel
         set(value) {
@@ -193,10 +192,11 @@ class LokiLogger(
     }
 
     internal fun createChildByName(childName: String): LokiLogger {
-        val childLogger = LokiLogger(childName, this)
+        val childLogger = LokiLogger(childName, this, logLevel = logLevel)
         children.add(childLogger)
         return childLogger
     }
+
     companion object {
         /**
          * root logger name.

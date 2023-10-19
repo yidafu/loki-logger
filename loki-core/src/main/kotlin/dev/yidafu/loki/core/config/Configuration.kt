@@ -1,5 +1,6 @@
 package dev.yidafu.loki.core.config
 
+import dev.yidafu.loki.core.Level
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration.Companion.days
@@ -22,5 +23,8 @@ data class Configuration(
     val reportInterval: Long = 5 * 1000,
 
     @SerialName("max-survival-time")
-    val maxSurvivalTime: Long = 7.days.inWholeMilliseconds
+    val maxSurvivalTime: Long = 7.days.inWholeMilliseconds,
+
+    @SerialName("log-level")
+    val logLevel: String = Level.INFO_STR
 )

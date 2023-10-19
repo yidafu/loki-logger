@@ -8,16 +8,16 @@ import org.slf4j.ILoggerFactory
 import org.slf4j.Logger
 import java.util.concurrent.ConcurrentHashMap
 
-class LokiLoggerContext : ILoggerFactory, EventBus by EventBusDelegate() {
+class LokiLoggerContext(
+    var config: Configuration = Configuration()
+) : ILoggerFactory, EventBus by EventBusDelegate() {
     private val loggerMap: MutableMap<String, LokiLogger> = ConcurrentHashMap()
-    lateinit var config: Configuration
 
-    val root: LokiLogger = LokiLogger(LokiLogger.ROOT_LOGGER_NAME)
+    val root: LokiLogger = LokiLogger(LokiLogger.ROOT_LOGGER_NAME, logLevel = Level.from(config.logLevel))
     private val reporters = mutableListOf<Reporter>()
 
     init {
         loggerMap[root.name] = root
-        root.level = Level.Debug
     }
 
     /**
