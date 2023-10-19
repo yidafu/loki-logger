@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 group = "dev.yidafu.loki"
-version = "0.0.3"
+version = "0.0.6"
 
 plugins {
     kotlin("jvm")
@@ -85,7 +85,7 @@ publishing {
                         // New artifact coordinates
                         groupId.set("dev.yidafu.loki")
                         artifactId.set("lib")
-                        version.set("0.0.3")
+                        version.set("0.0.5")
                         message.set("groupId has been changed")
                     }
                 }

@@ -1,5 +1,5 @@
 group = "dev.yidafu.loki"
-version = "1.0-SNAPSHOT"
+version = "0.0.6"
 
 plugins {
     id("com.android.library")
@@ -62,7 +62,7 @@ publishing {
         create<MavenPublication>("mavenKotlin") {
             groupId = "dev.yidafu.loki"
             artifactId = "loki-android"
-            version = "0.0.1"
+//            version = "0.0.4"
 
             afterEvaluate {
                 from(components["release"])
@@ -79,7 +79,7 @@ publishing {
                     relocation {
                         groupId.set("dev.yidafu.loki")
                         artifactId.set("android")
-                        version.set("0.0.1")
+                        version.set("0.0.4")
                         message.set("groupId has been changed")
                     }
                 }
