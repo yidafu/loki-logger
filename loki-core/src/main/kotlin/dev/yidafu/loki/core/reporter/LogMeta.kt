@@ -13,19 +13,27 @@ data class LogMeta(
      * log file path
      */
     val filepath: String,
+
     /**
      * log file inode
      */
     val inode: Long,
+
     /**
      * pointer of already report content
-     *
      */
     var pointer: Long,
+
+    /**
+     * reported row
+     */
+    var row: Long = 0,
+
     /**
      * @hide
      */
     val isDone: Boolean = false,
+
     /**
      * File instance of [filepath]
      */

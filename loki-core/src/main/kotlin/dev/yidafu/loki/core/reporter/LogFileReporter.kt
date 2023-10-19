@@ -56,7 +56,7 @@ class LogFileReporter(
 
             // 不管上报成功与否，都需要自增
             it.pointer += logs.fold(logs.size) { acc, s -> acc + s.length }
-
+            it.row += logs.size
             try {
                 report(logs)
             } catch (tr: Throwable) {
