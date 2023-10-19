@@ -23,9 +23,6 @@ class AndroidServiceProvider : BaseServiceProvider() {
      *
      */
     override fun initialize() {
-        loggerContext = LokiLoggerContext()
-        mdcAdapter = LokiMDCAdapter()
-        markerFactory = BasicMarkerFactory()
 
         val context = YLog.context
         requireNotNull(context) { "You should call YLog.setContext(context) before logging" }
@@ -36,10 +33,14 @@ class AndroidServiceProvider : BaseServiceProvider() {
             logDirectory = context.filesDir.absolutePath + "/log",
             topic = context.getMetaDataString("loki_topic", if (yConfig.topic == "unknown") context.getAppName() else yConfig.topic),
             reportInterval = context.getMetaDataLong("loki_report_interval", yConfig.reportInterval),
-            maxSurvivalTime = context.getMetaDataLong("loki_log_file_max_survival_time", yConfig.maxSurvivalTime)
+            maxSurvivalTime = context.getMetaDataLong("loki_log_file_max_survival_time", yConfig.maxSurvivalTime),
+            logLevel = context.getMetaDataString("loki_log_level", yConfig.logLevel),
         )
 
-        loggerContext.config = config
+        mdcAdapter = LokiMDCAdapter()
+        markerFactory = BasicMarkerFactory()
+        loggerContext = LokiLoggerContext(config)
+
 
         loggerContext.root.addAppender(
             AndroidAppender().apply {

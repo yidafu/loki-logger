@@ -52,6 +52,35 @@ class MainActivity : ComponentActivity() {
                         Spacer(Modifier.height(20.dp))
 
                         Button(onClick = {
+                            logger.debug("Debug Message")
+
+                        }) {
+                            Text("Debug")
+                        }
+                        Spacer(Modifier.height(20.dp))
+
+                        Button(onClick = {
+                            logger.info("Info Message")
+                        }) {
+                            Text("Info")
+                        }
+                        Spacer(Modifier.height(20.dp))
+
+                        Button(onClick = {
+                            logger.warn("Warn Message")
+                        }) {
+                            Text("Warn")
+                        }
+                        Spacer(Modifier.height(20.dp))
+
+                        Button(onClick = {
+                            logger.error("Error Message")
+                        }) {
+                            Text("Error")
+                        }
+
+                        Spacer(Modifier.height(20.dp))
+                        Button(onClick = {
                             Log.i("Main", "开始上报")
                             loggerContext.startReporters()
                         }) {

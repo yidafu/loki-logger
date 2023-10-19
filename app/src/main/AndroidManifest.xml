@@ -17,6 +17,7 @@
         <meta-data android:name="loki_topic" android:value="ExampleApp" />
         <meta-data android:name="loki_http_endpoint" android:value="http://172.16.73.192:8201/loki/api/v1/push" />
         <meta-data android:name="loki_report_interval" android:value="2000" />
+        <meta-data android:name="loki_log_level" android:value="warn" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
