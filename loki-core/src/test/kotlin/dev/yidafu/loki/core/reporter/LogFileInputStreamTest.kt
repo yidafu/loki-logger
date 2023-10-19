@@ -27,12 +27,12 @@ class LogFileInputStreamTest : FunSpec({
     }
 
     test("read chinese context") {
-        val dirPath = "/tmp/loki-logger/input-stream"
+        val dirPath = "."
         val dir = File(dirPath)
         dir.mkdirs()
         File("$dirPath/test-cn.log").delete()
         val log = File("$dirPath/test-cn.log")
-        log.writeText("#第一行中文")
+        log.writeText("#")
         val stream = LogFileInputStream(log, 0)
         log.appendText("第一行中文")
         stream.readLines().shouldBeEmpty()
