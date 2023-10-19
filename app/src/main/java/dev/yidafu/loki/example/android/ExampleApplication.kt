@@ -13,6 +13,7 @@ class ExampleApplication : Application() {
         }
         val loggerContext = LoggerFactory.getILoggerFactory() as LokiLoggerContext
         loggerContext.start()
+        loggerContext.stopReporters()
         super.attachBaseContext(base)
     }
 

@@ -15,7 +15,7 @@ class LogFileReporter(
     private val sender: Sender,
 ) : IntervalReporter(reportInterval) {
 
-    private lateinit var metaFile: LogMetaFile
+    private var metaFile: LogMetaFile? = null
 
     private val logStreamMap = mutableMapOf<String, LogFileInputStream>()
 
@@ -50,7 +50,7 @@ class LogFileReporter(
     }
 
     override fun report() {
-        metaFile.getNeedReportFiles().forEach {
+        metaFile?.getNeedReportFiles()?.forEach {
             val stream = getStream(it)
             val logs = stream.readLines()
 
@@ -63,7 +63,7 @@ class LogFileReporter(
                 println("send data to Loki failed ${tr.message}")
             }
         }
-        metaFile.updateMateFile()
+        metaFile?.updateMateFile()
     }
 
     override fun onStart() {
@@ -75,7 +75,10 @@ class LogFileReporter(
 
     override fun onStop() {
         super.onStop()
-        close()
+        // 只有 isStarted 才有必要 close
+        if (isStarted()) {
+            close()
+        }
     }
 
     /**
@@ -84,6 +87,6 @@ class LogFileReporter(
     private fun close() {
         logStreamMap.values.forEach { it.close() }
         logStreamMap.clear()
-        metaFile.close()
+        metaFile?.close()
     }
 }
