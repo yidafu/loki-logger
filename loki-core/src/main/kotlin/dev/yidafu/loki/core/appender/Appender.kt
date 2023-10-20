@@ -6,4 +6,6 @@ interface Appender<E> : EventListener {
     abstract var name: String
 
     fun doAppend(event: E)
+
+    fun flush()
 }

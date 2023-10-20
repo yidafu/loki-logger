@@ -39,7 +39,15 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
             add(event)
         }
     }
-    private suspend fun flush() {
+
+    override fun flush() {
+        // 确保同步刷日志
+        runBlocking {
+            flushLog()
+        }
+    }
+
+    private suspend fun flushLog() {
         val iter = queue.iterator()
         val bufferArray = ArrayList<E>(20)
         while (iter.hasNext()) {
@@ -69,7 +77,7 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
                     break
                 }
                 delay(16)
-                flush()
+                flushLog()
             }
         }
     }

@@ -197,6 +197,16 @@ class LokiLogger(
         return childLogger
     }
 
+    /**
+     * 刷新缓存的日志到磁盘
+     */
+    fun flush() {
+        // appender 日志落盘
+        iterator().forEach { it.flush() }
+        // child logger flush
+        children.forEach { it.flush() }
+    }
+
     companion object {
         /**
          * root logger name.

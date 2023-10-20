@@ -21,6 +21,11 @@ abstract class BaseAppender<E> : Appender<E> {
         _isStarted = false
     }
 
+    /**
+     * nop flush
+     */
+    override fun flush() {}
+
     override fun setEventBus(bus: EventBus) {
         bus.addListener(this)
     }

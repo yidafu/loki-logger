@@ -92,4 +92,12 @@ class LokiLoggerContext(
     fun stop() {
         emitStop()
     }
+
+    fun flush() {
+        root.flush()
+    }
+
+    fun report() {
+        reporters.forEach { if (it.isStarted()) it.report() }
+    }
 }

@@ -84,6 +84,9 @@ data class LokiStream(
         return values.contentDeepEquals(other.values)
     }
 
+    /**
+     * 手动拼接 JSON
+     */
     override fun toString(): String {
         return StringBuilder().apply {
             append("{\"stream\":{")
