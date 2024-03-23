@@ -98,7 +98,7 @@ class LokiLogEvent(
          */
         fun create(level: Level, loggerName: String, message: String): LokiLogEvent {
             val timestamp = getNanosecond()
-            val map = MDC.getCopyOfContextMap()
+            val map = MDC.getCopyOfContextMap() ?: emptyMap()
             val topic = map[Constants.TAG_TOPIC] ?: "-"
             val hostname = map[Constants.TAG_HOSTNAME] ?: "-"
             val pid = map[Constants.TAG_PID] ?: "-"
