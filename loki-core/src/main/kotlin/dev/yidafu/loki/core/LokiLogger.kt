@@ -5,6 +5,7 @@ import dev.yidafu.loki.core.appender.AppenderAttachableImpl
 import org.slf4j.Marker
 import org.slf4j.helpers.AbstractLogger
 import org.slf4j.helpers.MessageFormatter
+import java.util.concurrent.ConcurrentLinkedDeque
 
 /**
  * LokiLogger extends [org.slf4j.helpers.AbstractLogger].
@@ -12,11 +13,13 @@ import org.slf4j.helpers.MessageFormatter
 class LokiLogger(
     private val _name: String,
     private val parent: LokiLogger? = null,
-    private val children: MutableList<LokiLogger> = mutableListOf(),
+    /**
+     * ensure concurrency safe
+     */
+    private val children: ConcurrentLinkedDeque<LokiLogger> = ConcurrentLinkedDeque<LokiLogger>(),
     private var logLevel: Level = Level.Info,
 ) : AbstractLogger(),
-    AppenderAttachable<ILogEvent> by AppenderAttachableImpl()
-{
+    AppenderAttachable<ILogEvent> by AppenderAttachableImpl() {
     var level: Level
         get() = logLevel
         set(value) {

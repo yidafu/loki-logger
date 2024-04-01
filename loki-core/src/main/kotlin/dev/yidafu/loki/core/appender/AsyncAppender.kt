@@ -1,6 +1,13 @@
 package dev.yidafu.loki.core.appender
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.util.Deque
 import java.util.concurrent.ConcurrentLinkedDeque
 
 /**
@@ -8,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedDeque
  *
  */
 abstract class AsyncAppender<E> : BaseAppender<E>() {
-    private val queue: ConcurrentLinkedDeque<E> = ConcurrentLinkedDeque()
+    private val queue: Deque<E> = ConcurrentLinkedDeque()
 
     private var eventLoopJob: Job? = null
     override fun onStart() {
@@ -31,7 +38,7 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
     abstract fun filterLevel(event: E): Boolean
 
     private fun add(event: E) {
-        queue.add(event)
+        queue.addLast(event)
     }
 
     override fun doAppend(event: E) {
@@ -48,14 +55,13 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
     }
 
     private suspend fun flushLog() {
-//        val iter = queue.iterator()
         val bufferArray = ArrayList<E>(20)
-        while (queue.isEmpty()) {
-            queue.poll()?.let {
-                if (bufferArray.size == 20) {
-                    asyncAppend(bufferArray)
-                    bufferArray.clear()
-                }
+        while (queue.isNotEmpty()) {
+            val event = queue.pollFirst()
+            bufferArray.add(event)
+            if (bufferArray.size == 20) {
+                asyncAppend(bufferArray)
+                bufferArray.clear()
             }
         }
         if (bufferArray.isNotEmpty()) {

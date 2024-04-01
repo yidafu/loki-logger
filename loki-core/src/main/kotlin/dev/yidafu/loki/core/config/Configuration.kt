@@ -26,5 +26,5 @@ data class Configuration(
     val maxSurvivalTime: Long = 7.days.inWholeMilliseconds,
 
     @SerialName("log-level")
-    val logLevel: String = Level.INFO_STR
+    val logLevel: String = Level.INFO_STR,
 )

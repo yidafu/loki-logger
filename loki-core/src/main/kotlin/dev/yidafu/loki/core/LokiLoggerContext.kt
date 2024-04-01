@@ -9,7 +9,7 @@ import org.slf4j.Logger
 import java.util.concurrent.ConcurrentHashMap
 
 class LokiLoggerContext(
-    var config: Configuration = Configuration()
+    var config: Configuration = Configuration(),
 ) : ILoggerFactory, EventBus by EventBusDelegate() {
     private val loggerMap: MutableMap<String, LokiLogger> = ConcurrentHashMap()
 
@@ -48,8 +48,9 @@ class LokiLoggerContext(
         if (logger != null) {
             return logger
         }
-
+        // dev.yidafu.loki.core ==> [dev, yidafu, loki, core]
         return name.split(".")
+            // => [[dev], [dev, yidafu], [dev, yidafu, loki],  [dev, yidafu, loki, core]]
             .fold(mutableListOf<MutableList<String>>()) { acc, s ->
                 if (acc.isEmpty()) {
                     acc.add(mutableListOf(s))
@@ -61,12 +62,12 @@ class LokiLoggerContext(
                 }
                 acc
             }
+            // => [dev, dev.yidafu, dev.yidafu.loki,  dev.yidafu.loki.core]
             .map { it.joinToString(".") }
-            .fold(root) { l, childName ->
-                val childLogger = l.getChildByName(childName)
+            .fold(root) { pLogger, childName ->
 
-                childLogger ?: run {
-                    val cLogger = l.createChildByName(childName)
+                pLogger.getChildByName(childName) ?: run {
+                    val cLogger = pLogger.createChildByName(childName)
                     loggerMap[childName] = cLogger
                     cLogger
                 }

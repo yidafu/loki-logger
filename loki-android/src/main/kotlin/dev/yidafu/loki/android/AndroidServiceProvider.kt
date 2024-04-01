@@ -23,7 +23,6 @@ class AndroidServiceProvider : BaseServiceProvider() {
      *
      */
     override fun initialize() {
-
         val context = YLog.context
         requireNotNull(context) { "You should call YLog.setContext(context) before logging" }
         val yConfig = YLog.yConfig
@@ -40,7 +39,6 @@ class AndroidServiceProvider : BaseServiceProvider() {
         mdcAdapter = LokiMDCAdapter()
         markerFactory = BasicMarkerFactory()
         loggerContext = LokiLoggerContext(config)
-
 
         loggerContext.root.addAppender(
             AndroidAppender().apply {
@@ -73,5 +71,6 @@ class AndroidServiceProvider : BaseServiceProvider() {
         MDC.put("fingerprint", Build.FINGERPRINT)
         MDC.put("osRelease", Build.VERSION.RELEASE)
         MDC.put("osSdk", Build.VERSION.SDK_INT.toString())
+        MDC.put("versionCode", context.getVersionCode().toString())
     }
 }
