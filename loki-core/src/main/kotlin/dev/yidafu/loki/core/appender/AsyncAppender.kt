@@ -1,14 +1,14 @@
 package dev.yidafu.loki.core.appender
 
-import dev.yidafu.loki.core.list.LinkedRingList
 import kotlinx.coroutines.*
+import java.util.concurrent.ConcurrentLinkedDeque
 
 /**
  * push [dev.yidafu.loki.core.ILogEvent] to [queue] first. then per 16ms will consume all queue data.
  *
  */
 abstract class AsyncAppender<E> : BaseAppender<E>() {
-    private val queue: LinkedRingList<E> = LinkedRingList(1024)
+    private val queue: ConcurrentLinkedDeque<E> = ConcurrentLinkedDeque()
 
     private var eventLoopJob: Job? = null
     override fun onStart() {
@@ -48,15 +48,14 @@ abstract class AsyncAppender<E> : BaseAppender<E>() {
     }
 
     private suspend fun flushLog() {
-        val iter = queue.iterator()
+//        val iter = queue.iterator()
         val bufferArray = ArrayList<E>(20)
-        while (iter.hasNext()) {
-            val event = iter.next()
-            bufferArray.add(event)
-            iter.remove()
-            if (bufferArray.size == 20) {
-                asyncAppend(bufferArray)
-                bufferArray.clear()
+        while (queue.isEmpty()) {
+            queue.poll()?.let {
+                if (bufferArray.size == 20) {
+                    asyncAppend(bufferArray)
+                    bufferArray.clear()
+                }
             }
         }
         if (bufferArray.isNotEmpty()) {
